@@ -44,14 +44,12 @@ public class ApiSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 				.exceptionHandling()
-				.authenticationEntryPoint(new AjaxAwareAuthEntryPoint("/login/#"))
+				.authenticationEntryPoint(new AjaxAwareAuthEntryPoint("/#/login"))
 				.and()
 				.authorizeRequests()
-				.antMatchers("/login/**", "/resources/**", "/static/**", "/actuator/**").permitAll()
+				.anyRequest().permitAll()
 				.antMatchers("/api/protected/**").hasRole("USER")
 				.antMatchers("/api/open/**").permitAll()
-				.anyRequest().authenticated()
-
 				.and()
 				.formLogin()
 				.successHandler(successHandler)
@@ -66,6 +64,7 @@ public class ApiSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
+		// TODO CUSTOM AUTHENTICATION PROVIDER
 		val provider = new DaoAuthenticationProvider(); {
 			provider.setUserDetailsService(userDetailsService);
 			provider.setPasswordEncoder(passwordEncoder);
