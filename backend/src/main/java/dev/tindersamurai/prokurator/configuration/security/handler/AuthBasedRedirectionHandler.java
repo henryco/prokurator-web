@@ -18,6 +18,8 @@ public class AuthBasedRedirectionHandler extends AbstractAuthRedirectionHandler 
 			HttpServletResponse response,
 			Authentication authentication
 	) {
+		// TODO: MAYBE PREVENT REDIRECTION
+		// TODO: OR HANDLE REDIRECT ON FRONTEND?...
 		return "/#/";
 	}
 }

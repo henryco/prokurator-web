@@ -45,13 +45,19 @@ public class ApiSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.authenticationEntryPoint(new AjaxAwareAuthEntryPoint("/#/login"))
 				.and()
 				.authorizeRequests()
-				.anyRequest().permitAll()
+				.anyRequest().authenticated()
 				.antMatchers("/api/protected/**").hasRole("USER")
 				.antMatchers("/api/open/**").permitAll()
+
+				.antMatchers("/resources/**").permitAll()
+				.antMatchers("/actuator/**").permitAll()
+				.antMatchers("/static/**").permitAll()
+
+				.antMatchers("/login/**").permitAll()
+				.antMatchers("/").permitAll()
+
 				.and()
 				.formLogin()
-				.successHandler(successHandler)
-				.failureHandler(failureHandler)
 				.loginPage("/login")
 
 				.and()
@@ -63,6 +69,7 @@ public class ApiSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		val filter = new ProkuratorAuthFilter(); {
 			filter.setAuthenticationManager(authenticationManagerBean());
 			filter.setAuthenticationFailureHandler(failureHandler);
+			filter.setAuthenticationSuccessHandler(successHandler);
 		}
 		return filter;
 	}
