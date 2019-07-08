@@ -1,4 +1,4 @@
-package dev.tindersamurai.prokurator.configuration.security.details;
+package dev.tindersamurai.prokurator.configuration.security.details.service;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

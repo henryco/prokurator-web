@@ -21,7 +21,7 @@ public class AjaxAwareAuthEntryPoint extends LoginUrlAuthenticationEntryPoint {
 			throws IOException, ServletException {
 		log.debug("commence: {}, {}, {}", request, response, authException);
 		if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With")))
-			response.sendError(401, "Unauthorized");
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
 		else super.commence(request, response, authException);
 	}
 }
