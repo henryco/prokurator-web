@@ -27,6 +27,8 @@ public class ProkuratorAuthProvider extends AbstractUserDetailsAuthenticationPro
 			UsernamePasswordAuthenticationToken authentication
 	) throws AuthenticationException {
 		log.info("+ additionalAuthenticationChecks + {}, {}", userDetails, authentication);
+		val auth = ((ProkuratorAuthToken) authentication);
+		log.debug("auth: {}", auth);
 	}
 
 	@Override

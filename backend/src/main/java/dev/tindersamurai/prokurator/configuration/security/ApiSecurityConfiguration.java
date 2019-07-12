@@ -55,7 +55,7 @@ public class ApiSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				.and()
 				.formLogin()
-				.loginPage("/auth")
+				.loginPage("/login")
 
 				.and()
 				.logout()

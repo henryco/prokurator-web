@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ProkuratorAuthFilter extends UsernamePasswordAuthenticationFilter {
 
 	private static final String FORM_DISCORD_TOKEN_CODE_KEY = "discord_code";
-	private static final String FORM_DISCORD_TOKEN_ID_KEY = "discord_uid";
+//	private static final String FORM_DISCORD_TOKEN_ID_KEY = "discord_uid";
 
 	@Override
 	public Authentication attemptAuthentication(
@@ -34,15 +34,15 @@ public class ProkuratorAuthFilter extends UsernamePasswordAuthenticationFilter {
 	}
 
 	private ProkuratorAuthToken getAuthRequest(HttpServletRequest request) {
-		val id = obtainDiscordId(request);
+//		val id = obtainDiscordId(request);
 		val code = obtainTokenCode(request);
-		return new ProkuratorAuthToken(id, code);
+		return new ProkuratorAuthToken("user123", code);
 	}
 
-	private String obtainDiscordId(HttpServletRequest request) {
-		val id = request.getParameter(FORM_DISCORD_TOKEN_ID_KEY);
-		return id == null ? "" : id;
-	}
+//	private String obtainDiscordId(HttpServletRequest request) {
+//		val id = request.getParameter(FORM_DISCORD_TOKEN_ID_KEY);
+//		return id == null ? "" : id;
+//	}
 
 	private String obtainTokenCode(HttpServletRequest request) {
 		val code = request.getParameter(FORM_DISCORD_TOKEN_CODE_KEY);
