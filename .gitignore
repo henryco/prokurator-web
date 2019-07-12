@@ -34,3 +34,4 @@ etc
 *.rar
 
 resources/static
+secrets.yml

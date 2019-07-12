@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>discord</module>
         <module>frontend</module>
         <module>backend</module>
     </modules>

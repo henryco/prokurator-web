@@ -42,23 +42,20 @@ public class ApiSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.csrf().disable()
 				.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 				.exceptionHandling()
-				.authenticationEntryPoint(new AjaxAwareAuthEntryPoint("/#/login"))
+				.authenticationEntryPoint(new AjaxAwareAuthEntryPoint("/#/auth"))
 				.and()
 				.authorizeRequests()
-				.anyRequest().authenticated()
-				.antMatchers("/api/protected/**").hasRole("USER")
+				.antMatchers("/api/protected/**").authenticated()
 				.antMatchers("/api/open/**").permitAll()
 
 				.antMatchers("/resources/**").permitAll()
 				.antMatchers("/actuator/**").permitAll()
 				.antMatchers("/static/**").permitAll()
-
-				.antMatchers("/login/**").permitAll()
 				.antMatchers("/").permitAll()
 
 				.and()
 				.formLogin()
-				.loginPage("/login")
+				.loginPage("/auth")
 
 				.and()
 				.logout()

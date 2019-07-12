@@ -35,8 +35,7 @@ public class SwaggerConfiguration
 	public Docket api(){
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("pl.hitachi.vuefront.mvc.controller.api"))
-//				.apis(RequestHandlerSelectors.any())
+				.apis(RequestHandlerSelectors.basePackage("dev.tindersamurai.prokurator.mvc.controller"))
 				.paths(PathSelectors.any())
 				.build();
 	}
