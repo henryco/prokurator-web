@@ -12,6 +12,6 @@ public class TestSecuredController {
 
 	@GetMapping("/ping")
 	public String pingPong(Principal principal) {
-		return "pong: " + principal;
+		return "pong: " + principal.getName() + " : " + principal;
 	}
 }

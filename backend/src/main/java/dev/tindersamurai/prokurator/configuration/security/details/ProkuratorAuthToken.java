@@ -8,17 +8,17 @@ import java.util.Collection;
 
 public class ProkuratorAuthToken extends UsernamePasswordAuthenticationToken {
 
-	private @Getter String code;
-
-	public ProkuratorAuthToken(Object principal, Collection<? extends GrantedAuthority> authorities, String code) {
+	public ProkuratorAuthToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
 		super(principal, "", authorities);
-		this.code = code;
 		super.setAuthenticated(true);
 	}
 
-	public ProkuratorAuthToken(Object principal, String code) {
-		super(principal, "");
-		this.code = code;
+	public ProkuratorAuthToken(String code) {
+		super(code, "");
 		super.setAuthenticated(false);
+	}
+
+	public String getDiscordTokenCode() {
+		return this.getName();
 	}
 }

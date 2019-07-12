@@ -38,7 +38,7 @@ public class ProkuratorAuthProvider extends AbstractUserDetailsAuthenticationPro
 	) throws AuthenticationException {
 		log.info("retrieveUser; {}, {}", username, authentication);
 		val auth = ((ProkuratorAuthToken) authentication);
-		val details = detailsService.loadByDiscordTokenCode(auth.getCode());
+		val details = detailsService.loadByDiscordTokenCode(auth.getDiscordTokenCode());
 		log.info("details: {}", details);
 		return details;
 	}

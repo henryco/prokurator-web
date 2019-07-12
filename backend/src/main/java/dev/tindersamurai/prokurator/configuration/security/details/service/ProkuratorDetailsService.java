@@ -16,6 +16,6 @@ public class ProkuratorDetailsService implements IProkuratorDetailsService {
 
 		// TODO DISCORD OAUTH API INTEGRATION
 
-		return new ProkuratorUserDetails("randomID");
+		return new ProkuratorUserDetails("code: " + discordTokenCode);
 	}
 }

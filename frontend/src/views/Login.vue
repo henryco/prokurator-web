@@ -14,23 +14,12 @@
       const data = new FormData();
       data.set("discord_code", code)
 
-      axios({
-        method: 'post',
-        url: '/login',
-        data: data,
-        config: {
-          headers: {'Content-Type': 'multipart/form-data' },
-          withCredentials: true
-        }
+      const response = await axios.post("http://localhost:8080/login", data, {
+        headers: {'Content-Type': 'multipart/form-data' },
+        withCredentials: true
       })
-      .then(function (response) {
-        //handle success
-        console.log(response);
-      })
-      .catch(function (response) {
-        //handle error
-        console.log(response);
-      });
+
+      console.log(response)
     }
   }
 </script>
