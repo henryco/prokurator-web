@@ -1,8 +1,8 @@
-package dev.tindersamurai.prokurator.configuration.security.auth;
+package dev.tindersamurai.prokurator.configuration.security.auth.processor;
 
+import dev.tindersamurai.prokurator.configuration.security.auth.credentials.DiscordAuthenticationToken;
 import lombok.val;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +19,6 @@ public class DiscordAuthProcessor implements AuthenticationProcessor {
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
 		val code = request.getParameter("discord_code");
-		val authenticationToken = new UsernamePasswordAuthenticationToken("user", "password");
-		return authenticationManager.authenticate(authenticationToken);
+		return authenticationManager.authenticate(new DiscordAuthenticationToken(code));
 	}
 }

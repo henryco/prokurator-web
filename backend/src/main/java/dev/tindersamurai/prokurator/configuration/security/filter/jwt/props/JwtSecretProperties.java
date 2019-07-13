@@ -1,9 +1,6 @@
-package dev.tindersamurai.prokurator.configuration.security.props;
+package dev.tindersamurai.prokurator.configuration.security.filter.jwt.props;
 
 public interface JwtSecretProperties {
-	// JWT LOGIN / LOGOUT ENDPOINTS
-	String AUTH_LOGOUT_URL = "/api/auth/logout";
-	String AUTH_LOGIN_URL = "/api/auth/login";
 
 	// JWT token defaults
 	String TOKEN_HEADER = "Authorization";

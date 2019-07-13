@@ -1,6 +1,6 @@
-package dev.tindersamurai.prokurator.configuration.security.filter;
+package dev.tindersamurai.prokurator.configuration.security.filter.jwt;
 
-import dev.tindersamurai.prokurator.configuration.security.props.JwtSecretProperties;
+import dev.tindersamurai.prokurator.configuration.security.filter.jwt.props.JwtSecretProperties;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;

@@ -1,18 +1,18 @@
 package dev.tindersamurai.prokurator.configuration.security;
 
 import dev.tindersamurai.prokurator.configuration.security.ajax.AjaxAwareAuthEntryPoint;
-import dev.tindersamurai.prokurator.configuration.security.auth.AuthenticationProcessor;
-import dev.tindersamurai.prokurator.configuration.security.auth.DiscordAuthProcessor;
-import dev.tindersamurai.prokurator.configuration.security.filter.JwtAuthenticationFilter;
-import dev.tindersamurai.prokurator.configuration.security.filter.JwtAuthorizationFilter;
-import dev.tindersamurai.prokurator.configuration.security.props.JwtSecretProperties;
+import dev.tindersamurai.prokurator.configuration.security.auth.processor.AuthenticationProcessor;
+import dev.tindersamurai.prokurator.configuration.security.auth.processor.DiscordAuthProcessor;
+import dev.tindersamurai.prokurator.configuration.security.filter.jwt.JwtAuthenticationFilter;
+import dev.tindersamurai.prokurator.configuration.security.filter.jwt.JwtAuthorizationFilter;
 
+import dev.tindersamurai.prokurator.configuration.security.filter.jwt.props.JwtSecretProperties;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,10 +30,15 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+	private final AuthenticationManager authenticationManager;
 	private final JwtSecretProperties secretProperties;
 
 	@Autowired
-	public SecurityConfiguration(JwtSecretProperties secretProperties) {
+	public SecurityConfiguration(
+			AuthenticationManager authenticationManager,
+			JwtSecretProperties secretProperties
+	) {
+		this.authenticationManager = authenticationManager;
 		this.secretProperties = secretProperties;
 	}
 
@@ -52,28 +57,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/static/**").permitAll()
 				.antMatchers("/").permitAll()
 				.and()
-				.addFilter(authenticationFilter())
+				.addFilter(authenticationFilter("/api/auth/login"))
 				.addFilter(authorizationFilter())
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		;
-	}
-
-	private AbstractAuthenticationProcessingFilter authenticationFilter() throws Exception {
-		val authUrl = "/api/auth/login";
-		return new JwtAuthenticationFilter(authenticationProcessor(), secretProperties, authUrl);
-	}
-
-	private BasicAuthenticationFilter authorizationFilter() throws Exception {
-		return new JwtAuthorizationFilter(authenticationManager(), secretProperties);
-	}
-
-	@Override
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-				.withUser("user")
-				.password(passwordEncoder().encode("password"))
-				.authorities("ROLE_USER");
 	}
 
 	@Bean
@@ -89,7 +77,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public AuthenticationProcessor authenticationProcessor() throws Exception {
-		return new DiscordAuthProcessor(authenticationManager());
+	public AuthenticationProcessor authenticationProcessor() {
+		return new DiscordAuthProcessor(authenticationManager);
 	}
+
+	private BasicAuthenticationFilter authorizationFilter() {
+		return new JwtAuthorizationFilter(authenticationManager, secretProperties);
+	}
+
+	@SuppressWarnings("SameParameterValue")
+	private AbstractAuthenticationProcessingFilter authenticationFilter(String url) {
+		return new JwtAuthenticationFilter(authenticationProcessor(), secretProperties, url);
+	}
+
 }

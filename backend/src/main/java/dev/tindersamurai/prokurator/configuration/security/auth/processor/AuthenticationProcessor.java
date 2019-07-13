@@ -1,4 +1,4 @@
-package dev.tindersamurai.prokurator.configuration.security.auth;
+package dev.tindersamurai.prokurator.configuration.security.auth.processor;
 
 import org.springframework.security.core.Authentication;
 

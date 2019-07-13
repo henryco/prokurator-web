@@ -1,7 +1,7 @@
-package dev.tindersamurai.prokurator.configuration.security.filter;
+package dev.tindersamurai.prokurator.configuration.security.filter.jwt;
 
-import dev.tindersamurai.prokurator.configuration.security.auth.AuthenticationProcessor;
-import dev.tindersamurai.prokurator.configuration.security.props.JwtSecretProperties;
+import dev.tindersamurai.prokurator.configuration.security.auth.processor.AuthenticationProcessor;
+import dev.tindersamurai.prokurator.configuration.security.filter.jwt.props.JwtSecretProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -42,8 +42,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 											FilterChain filterChain, Authentication authentication) {
-		val user = ((User) authentication.getPrincipal());
-
+		val user = ((UserDetails) authentication.getPrincipal());
 		val roles = user.getAuthorities()
 				.stream()
 				.map(GrantedAuthority::getAuthority)
