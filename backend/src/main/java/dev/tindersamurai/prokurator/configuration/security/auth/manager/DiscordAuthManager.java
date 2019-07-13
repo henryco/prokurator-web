@@ -1,6 +1,6 @@
 package dev.tindersamurai.prokurator.configuration.security.auth.manager;
 
-import dev.tindersamurai.prokurator.configuration.security.auth.details.DiscordDetailsService;
+import dev.tindersamurai.prokurator.configuration.security.auth.details.IDiscordDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +15,10 @@ import java.util.Objects;
 @Component @Slf4j
 public class DiscordAuthManager implements AuthenticationManager {
 
-	private final DiscordDetailsService discordDetailsService;
+	private final IDiscordDetailsService discordDetailsService;
 
 	@Autowired
-	public DiscordAuthManager(DiscordDetailsService discordDetailsService) {
+	public DiscordAuthManager(IDiscordDetailsService discordDetailsService) {
 		this.discordDetailsService = discordDetailsService;
 	}
 
@@ -26,9 +26,7 @@ public class DiscordAuthManager implements AuthenticationManager {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		val discordTokenCode = Objects.toString(authentication.getPrincipal());
 		val userDetails = discordDetailsService.loadByDiscordTokenCode(discordTokenCode);
-
-		// TODO DISCORD AUTH FLOW
-
+		// TODO MAYBE WHITE LIST
 		return new UsernamePasswordAuthenticationToken(userDetails, null);
 	}
 }

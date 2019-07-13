@@ -1,4 +1,4 @@
-package dev.tindersamurai.prokurator.configuration.security.auth.details.imp;
+package dev.tindersamurai.prokurator.configuration.security.auth.details;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,6 +7,12 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class DiscordUserDetails implements UserDetails {
+
+	private final String discordId;
+
+	public DiscordUserDetails(String discordId) {
+		this.discordId = discordId;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -20,7 +26,7 @@ public class DiscordUserDetails implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return "random_discord_user";
+		return discordId;
 	}
 
 	@Override
