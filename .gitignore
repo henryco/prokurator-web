@@ -35,3 +35,4 @@ etc
 
 resources/static
 secrets.yml
+jwt.properties
