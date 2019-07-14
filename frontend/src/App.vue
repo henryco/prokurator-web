@@ -5,8 +5,23 @@
 </template>
 
 <script>
+  import axios from 'axios'
 
-export default {
-  name: 'App'
-}
+  export default {
+    name: 'App',
+
+    mounted () {
+
+      axios.interceptors.request.use(
+        (config) => {
+          if (!config.headers.Authorization) {
+            const token = this.$cookies.get('Authorization')
+            if (token) config.headers.Authorization = `${token}`
+          }
+          return config
+        },
+        error => Promise.reject(error)
+      )
+    }
+  }
 </script>

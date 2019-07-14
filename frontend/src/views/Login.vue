@@ -8,18 +8,19 @@
     name: "Login",
 
     mounted: async function () {
-      const code = this.$route.query.code;
-      console.log(`code: ${code}`)
-
       const data = new FormData();
-      data.set("discord_code", code)
+      data.set("discord_code", this.$route.query.code)
 
-      const response = await axios.post("http://localhost:8080/login", data, {
+      const response = await axios.post("/api/auth/login", data, {
         headers: {'Content-Type': 'multipart/form-data' },
         withCredentials: true
       })
 
-      console.log(response)
+      const token = response.headers['authorization']
+      this.$cookies.set('Authorization', token)
+
+      if (!token)
+        throw `Cannot authorize ${response}`
     }
   }
 </script>
