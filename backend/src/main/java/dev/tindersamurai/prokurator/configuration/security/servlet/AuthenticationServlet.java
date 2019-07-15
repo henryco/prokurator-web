@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Controller
@@ -37,6 +37,18 @@ public class AuthenticationServlet {
 		val clientId = "client_id=" + secrets.getClientId();
 		val scope = "scope=" + secrets.getOAuthScope();
 		val type = "response_type=code";
-		return "redirect:" + base + "?" + clientId + "&" + redirect + "&" + scope + "&" + type;
+
+		val string = base + "?" + clientId + "&" + redirect + "&" + scope + "&" + type;
+		return "redirect:" + Helper.encodeValue(string);
+	}
+
+	private static final class Helper {
+		private static String encodeValue(String value) {
+			try {
+				return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+			} catch (UnsupportedEncodingException ex) {
+				throw new RuntimeException(ex.getCause());
+			}
+		}
 	}
 }
