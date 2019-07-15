@@ -1,4 +1,4 @@
-package dev.tindersamurai.prokurator.configuration.security.filter.jwt.props;
+package dev.tindersamurai.prokurator.configuration.security.filter.props;
 
 public interface JwtSecretProperties {
 

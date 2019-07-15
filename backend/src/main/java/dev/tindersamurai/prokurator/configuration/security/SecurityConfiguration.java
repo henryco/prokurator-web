@@ -4,11 +4,11 @@ import dev.tindersamurai.prokurator.configuration.security.ajax.AjaxAwareAuthEnt
 import dev.tindersamurai.prokurator.configuration.security.auth.processor.AuthenticationProcessor;
 import dev.tindersamurai.prokurator.configuration.security.auth.processor.DiscordAuthProcessor;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
-import dev.tindersamurai.prokurator.configuration.security.filter.jwt.JwtAuthenticationFilter;
-import dev.tindersamurai.prokurator.configuration.security.filter.jwt.JwtAuthorizationFilter;
+import dev.tindersamurai.prokurator.configuration.security.filter.JwtAuthenticationFilter;
+import dev.tindersamurai.prokurator.configuration.security.filter.JwtAuthorizationFilter;
 
-import dev.tindersamurai.prokurator.configuration.security.filter.jwt.JwtLogoutFilter;
-import dev.tindersamurai.prokurator.configuration.security.filter.jwt.props.JwtSecretProperties;
+import dev.tindersamurai.prokurator.configuration.security.filter.JwtLogoutFilter;
+import dev.tindersamurai.prokurator.configuration.security.filter.props.JwtSecretProperties;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;

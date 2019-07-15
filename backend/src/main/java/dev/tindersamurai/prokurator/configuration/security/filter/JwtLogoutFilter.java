@@ -1,7 +1,7 @@
-package dev.tindersamurai.prokurator.configuration.security.filter.jwt;
+package dev.tindersamurai.prokurator.configuration.security.filter;
 
 import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
-import dev.tindersamurai.prokurator.configuration.security.filter.jwt.props.JwtSecretProperties;
+import dev.tindersamurai.prokurator.configuration.security.filter.props.JwtSecretProperties;
 import io.jsonwebtoken.Jwts;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Setter;

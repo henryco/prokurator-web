@@ -1,4 +1,4 @@
-package dev.tindersamurai.prokurator.configuration.security.filter.jwt.props;
+package dev.tindersamurai.prokurator.configuration.security.filter.props;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

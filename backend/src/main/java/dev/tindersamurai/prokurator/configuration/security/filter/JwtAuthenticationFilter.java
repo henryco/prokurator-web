@@ -1,8 +1,8 @@
-package dev.tindersamurai.prokurator.configuration.security.filter.jwt;
+package dev.tindersamurai.prokurator.configuration.security.filter;
 
 import dev.tindersamurai.prokurator.configuration.security.auth.processor.AuthenticationProcessor;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
-import dev.tindersamurai.prokurator.configuration.security.filter.jwt.props.JwtSecretProperties;
+import dev.tindersamurai.prokurator.configuration.security.filter.props.JwtSecretProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
