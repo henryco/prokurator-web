@@ -1,5 +1,6 @@
 package dev.tindersamurai.prokurator.configuration.security.filter.jwt;
 
+import dev.tindersamurai.prokurator.configuration.security.auth.session.TokenWhitelistException;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
 import dev.tindersamurai.prokurator.configuration.security.filter.jwt.props.JwtSecretProperties;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -96,6 +97,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 				log.warn("Request to parse JWT with invalid signature : {} failed : {}", token, e.getMessage());
 			} catch (IllegalArgumentException e) {
 				log.warn("Request to parse empty or null JWT : {} failed : {}", token, e.getMessage());
+			} catch (TokenWhitelistException e) {
+				log.warn("Token inst present on whitelist JWT: {}, failed: {}", token, e.getMessage());
 			}
 		}
 

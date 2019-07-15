@@ -7,10 +7,12 @@ import dev.tindersamurai.prokurator.configuration.security.auth.session.Whitelis
 import dev.tindersamurai.prokurator.configuration.security.filter.jwt.JwtAuthenticationFilter;
 import dev.tindersamurai.prokurator.configuration.security.filter.jwt.JwtAuthorizationFilter;
 
+import dev.tindersamurai.prokurator.configuration.security.filter.jwt.JwtLogoutFilter;
 import dev.tindersamurai.prokurator.configuration.security.filter.jwt.props.JwtSecretProperties;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -78,6 +80,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new DiscordAuthProcessor(authenticationManager);
 	}
 
+	@Bean
+	public FilterRegistrationBean<JwtLogoutFilter> logoutFilterRegistrationBean() {
+		val registrationBean = new FilterRegistrationBean<JwtLogoutFilter>(); {
+			registrationBean.setFilter(logoutFilter("/api/auth/logout"));
+			registrationBean.setOrder(Integer.MAX_VALUE);
+		}
+		return registrationBean;
+	}
+
 	private BasicAuthenticationFilter authorizationFilter() {
 		return new JwtAuthorizationFilter(authenticationManager, secretProperties, whitelistService);
 	}
@@ -87,4 +98,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new JwtAuthenticationFilter(authenticationProcessor(), secretProperties, whitelistService, url);
 	}
 
+	@SuppressWarnings("SameParameterValue")
+	private JwtLogoutFilter logoutFilter(String url) {
+		return new JwtLogoutFilter(secretProperties, whitelistService, url);
+	}
 }
