@@ -7,7 +7,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component @Slf4j
-@PropertySource(value = "classpath:/properties.yml")
 public class Properties implements ProkuratorProperties {
 
 	private final Environment environment;

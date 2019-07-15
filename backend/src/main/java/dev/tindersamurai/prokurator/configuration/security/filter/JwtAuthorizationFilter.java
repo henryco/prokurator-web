@@ -52,6 +52,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 									FilterChain filterChain) throws IOException, ServletException {
+		log.debug("doFilterInternal");
 		val authentication = getAuthentication(request);
 		if (authentication == null) {
 			filterChain.doFilter(request, response);

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -84,7 +85,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public FilterRegistrationBean<JwtLogoutFilter> logoutFilterRegistrationBean() {
 		val registrationBean = new FilterRegistrationBean<JwtLogoutFilter>(); {
 			registrationBean.setFilter(logoutFilter("/api/auth/logout"));
-			registrationBean.setOrder(Integer.MAX_VALUE);
+			registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 		}
 		return registrationBean;
 	}

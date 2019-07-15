@@ -13,7 +13,7 @@ import retrofit2.http.POST;
 import java.util.HashMap;
 import java.util.Map;
 
-@BaseURL("https://discordapp.com/api/oauth2/token")
+@BaseURL("https://discordapp.com/api/oauth2/token/")
 public interface DiscordTokenExchangeRepository {
 
 	@Value class TokenExchangeForm {

@@ -56,6 +56,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 											FilterChain filterChain, Authentication authentication) {
+
+		log.debug("successfulAuthentication");
 		val user = ((UserDetails) authentication.getPrincipal());
 		val roles = user.getAuthorities()
 				.stream()

@@ -4,4 +4,8 @@ public interface ProkuratorSecrets {
 	String getClientId();
 
 	String getClientSecret();
+
+	String getOAuthScope();
+
+	String getOAuthRedirect();
 }

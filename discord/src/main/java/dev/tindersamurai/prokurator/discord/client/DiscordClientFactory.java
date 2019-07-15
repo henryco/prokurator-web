@@ -1,6 +1,8 @@
 package dev.tindersamurai.prokurator.discord.client;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dev.tindersamurai.prokurator.discord.client.util.BaseURL;
 import lombok.NonNull;
 import lombok.val;
@@ -21,8 +23,12 @@ public interface DiscordClientFactory {
 		if (annotation == null)
 			throw new NullPointerException("Repository should have annotation " + BaseURL.class.getName());
 
+		val gson = new GsonBuilder()
+				.setLenient()
+				.create();
+
 		val retrofit = new Retrofit.Builder()
-				.addConverterFactory(GsonConverterFactory.create())
+				.addConverterFactory(GsonConverterFactory.create(gson))
 				.client(new OkHttpClient.Builder().build())
 				.baseUrl(annotation.value())
 				.build();

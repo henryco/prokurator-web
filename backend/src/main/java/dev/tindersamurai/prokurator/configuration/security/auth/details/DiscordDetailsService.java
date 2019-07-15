@@ -30,9 +30,9 @@ public class DiscordDetailsService implements IDiscordDetailsService {
 				discordCode,
 				"authorization_code",
 				secrets.getClientId(),
-				"",
+				secrets.getOAuthRedirect(),
 				secrets.getClientSecret(),
-				"identify guilds"
+				secrets.getOAuthScope()
 		);
 
 		val exchange = exchangeRepository.exchange(exchangeForm);
