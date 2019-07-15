@@ -34,5 +34,5 @@ etc
 *.rar
 
 resources/static
-secrets.yml
+secrets.properties
 jwt.properties

@@ -2,33 +2,26 @@ package dev.tindersamurai.prokurator.configuration.security.filter.props;
 
 public interface JwtSecretProperties {
 
-	// JWT token defaults
-	String TOKEN_HEADER = "Authorization";
-	String TOKEN_PREFIX = "Bearer ";
-	String TOKEN_TYPE = "JWT";
-	String TOKEN_ISSUER = "secure-api";
-	String TOKEN_AUDIENCE = "secure-app";
-
 	String getJwtSecretKey();
 
 	default String getJwtTokenHeader() {
-		return TOKEN_HEADER;
+		return "Authorization";
 	}
 
 	default String getJwtTokenPrefix() {
-		return TOKEN_PREFIX;
+		return "Bearer ";
 	}
 
 	default String getJwtTokenType() {
-		return TOKEN_TYPE;
+		return "JWT";
 	}
 
 	default String getJwtTokenIssuer() {
-		return TOKEN_ISSUER;
+		return "secure-api";
 	}
 
 	default String getJwtTokenAudience() {
-		return TOKEN_AUDIENCE;
+		return "secure-app";
 	}
 
 	default long getJwtTokenLiveTime() {

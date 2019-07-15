@@ -28,6 +28,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>dev.tindersamurai</groupId>
+            <artifactId>discord</artifactId>
+            <version>0.0.1-shinsekai</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
             <version>1.20</version>

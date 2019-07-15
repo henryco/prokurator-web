@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @BaseURL("https://discordapp.com/api/oauth2/token")
-public interface DiscordTokenRepository {
+public interface DiscordTokenExchangeRepository {
 
 	@Value class TokenExchangeForm {
 		private String code;

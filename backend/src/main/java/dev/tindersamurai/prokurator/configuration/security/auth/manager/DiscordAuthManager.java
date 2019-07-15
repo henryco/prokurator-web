@@ -26,7 +26,6 @@ public class DiscordAuthManager implements AuthenticationManager {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		val discordTokenCode = Objects.toString(authentication.getPrincipal());
 		val userDetails = discordDetailsService.loadByDiscordTokenCode(discordTokenCode);
-		// TODO MAYBE WHITE LIST
 		return new UsernamePasswordAuthenticationToken(userDetails, null);
 	}
 }
