@@ -30,4 +30,8 @@ public interface JwtSecretProperties {
 	default String getJwtTokenAudience() {
 		return TOKEN_AUDIENCE;
 	}
+
+	default long getJwtTokenLiveTime() {
+		return 864000000L;
+	}
 }

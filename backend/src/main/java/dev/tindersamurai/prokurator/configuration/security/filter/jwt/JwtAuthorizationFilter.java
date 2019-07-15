@@ -1,5 +1,6 @@
 package dev.tindersamurai.prokurator.configuration.security.filter.jwt;
 
+import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
 import dev.tindersamurai.prokurator.configuration.security.filter.jwt.props.JwtSecretProperties;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -7,6 +8,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import io.micrometer.core.instrument.util.StringUtils;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +27,18 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
+
 	private final JwtSecretProperties jwtSecretProperties;
+	private @Setter WhitelistService whitelistService;
+
+	public JwtAuthorizationFilter(
+			AuthenticationManager authenticationManager,
+			JwtSecretProperties jwtSecretProperties,
+			WhitelistService whitelistService
+	) {
+		this(authenticationManager, jwtSecretProperties);
+		this.whitelistService = whitelistService;
+	}
 
 	public JwtAuthorizationFilter(
 			AuthenticationManager authenticationManager,
@@ -56,14 +69,17 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 				val parsedToken = Jwts.parser()
 						.setSigningKey(signingKey)
-						.parseClaimsJws(token.replace("Bearer ", ""));
+						.parseClaimsJws(token.replace(jwtSecretProperties.getJwtTokenPrefix(), ""));
 
 				val username = parsedToken
 						.getBody()
 						.getSubject();
 
+				if (whitelistService != null)
+					whitelistService.tokenShouldPresent(parsedToken.getBody().getId());
+
 				val authorities = ((List<?>) parsedToken.getBody()
-						.get("rol")).stream()
+						.get("role")).stream()
 						.map(authority -> new SimpleGrantedAuthority((String) authority))
 						.collect(Collectors.toList());
 

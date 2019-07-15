@@ -3,6 +3,7 @@ package dev.tindersamurai.prokurator.configuration.security;
 import dev.tindersamurai.prokurator.configuration.security.ajax.AjaxAwareAuthEntryPoint;
 import dev.tindersamurai.prokurator.configuration.security.auth.processor.AuthenticationProcessor;
 import dev.tindersamurai.prokurator.configuration.security.auth.processor.DiscordAuthProcessor;
+import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
 import dev.tindersamurai.prokurator.configuration.security.filter.jwt.JwtAuthenticationFilter;
 import dev.tindersamurai.prokurator.configuration.security.filter.jwt.JwtAuthorizationFilter;
 
@@ -30,14 +31,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private final AuthenticationManager authenticationManager;
 	private final JwtSecretProperties secretProperties;
+	private final WhitelistService whitelistService;
 
 	@Autowired
 	public SecurityConfiguration(
 			AuthenticationManager authenticationManager,
-			JwtSecretProperties secretProperties
+			JwtSecretProperties secretProperties,
+			WhitelistService whitelistService
 	) {
 		this.authenticationManager = authenticationManager;
 		this.secretProperties = secretProperties;
+		this.whitelistService = whitelistService;
 	}
 
 	@Override
@@ -75,12 +79,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	private BasicAuthenticationFilter authorizationFilter() {
-		return new JwtAuthorizationFilter(authenticationManager, secretProperties);
+		return new JwtAuthorizationFilter(authenticationManager, secretProperties, whitelistService);
 	}
 
 	@SuppressWarnings("SameParameterValue")
 	private AbstractAuthenticationProcessingFilter authenticationFilter(String url) {
-		return new JwtAuthenticationFilter(authenticationProcessor(), secretProperties, url);
+		return new JwtAuthenticationFilter(authenticationProcessor(), secretProperties, whitelistService, url);
 	}
 
 }

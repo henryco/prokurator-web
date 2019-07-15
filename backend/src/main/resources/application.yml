@@ -1,3 +1,17 @@
 logging:
   level:
     dev.tindersamurai.prokurator: DEBUG
+
+spring:
+
+  servlet:
+    multipart:
+      max-request-size: '150MB'
+      max-file-size: '150MB'
+
+  datasource:
+    initialization-mode: always
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
