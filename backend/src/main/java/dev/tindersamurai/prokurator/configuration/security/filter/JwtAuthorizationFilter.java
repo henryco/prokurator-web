@@ -1,7 +1,6 @@
 package dev.tindersamurai.prokurator.configuration.security.filter;
 
 import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DefaultDiscordUserDetails;
-import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DiscordUserDetails;
 import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DiscordUserDetails.TokenDetails;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.TokenWhitelistException;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
@@ -55,13 +54,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 									FilterChain filterChain) throws IOException, ServletException {
-		log.debug("doFilterInternal");
+		log.debug("AUTHORIZE");
 		val authentication = getAuthentication(request);
 		if (authentication == null) {
 			filterChain.doFilter(request, response);
 			return;
 		}
 
+		log.debug("AUTHORIZE[SET]");
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		filterChain.doFilter(request, response);
 	}

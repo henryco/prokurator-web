@@ -14,7 +14,7 @@ import java.security.Principal;
 public class TestOpenedController {
 
 	@GetMapping("/ping")
-	public String pingPong(Authentication authentication) {
+	public String pingPong(Principal authentication) {
 		log.debug("auth: {}", authentication);
 		return "pong: " + authentication;
 	}

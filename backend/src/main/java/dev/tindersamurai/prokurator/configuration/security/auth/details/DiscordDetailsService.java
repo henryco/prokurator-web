@@ -31,7 +31,6 @@ public class DiscordDetailsService implements IDiscordDetailsService {
 
 		val exchangeForm = new TokenExchangeForm(
 				discordCode,
-				"authorization_code",
 				secrets.getClientId(),
 				secrets.getOAuthRedirect(),
 				secrets.getClientSecret(),

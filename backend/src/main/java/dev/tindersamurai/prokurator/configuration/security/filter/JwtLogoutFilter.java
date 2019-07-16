@@ -60,12 +60,12 @@ public class JwtLogoutFilter extends OncePerRequestFilter {
 			HttpServletResponse response,
 			FilterChain filterChain
 	) throws ServletException, IOException {
-		log.debug("doFilterInternal[LOGOUT]: {}, {}, {}", request, response, filterChain);
 		if (!requestMatcher.matches(request)) {
 			filterChain.doFilter(request, response);
 			return;
 		}
 
+		log.debug("REMOVE _ TOKEN _ FROM _ WHITE _ LIST");
 		removeTokenFromWhitelist(request);
 
 		SecurityContextHolder.getContext().setAuthentication(null);
