@@ -1,7 +1,3 @@
-<template>
-  <div>LOGIN</div>
-</template>
-
 <script>
   import axios from 'axios';
   export default {
@@ -21,10 +17,12 @@
 
       if (!token)
         throw `Cannot authorize ${response}`
+
+      const lastPath = this.$cookies.get("router_cache");
+      if (lastPath) {
+        this.$cookies.remove("router_cache");
+        this.$router.push({name: lastPath});
+      }
     }
   }
 </script>
-
-<style scoped type="scss">
-
-</style>

@@ -29,7 +29,8 @@
     protected onLogin (): void {
       const router = this.$router.currentRoute
       const r_name = router.name
-      const r_path = router.fullPath
+
+      this.$cookies.set('router_cache', r_name);
       window.location.href = "/login"
     }
   }
