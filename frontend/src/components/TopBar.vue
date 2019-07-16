@@ -23,7 +23,7 @@
   import Vue from "vue"
 
   @Component({
-    name: "TobBar"
+    name: "TopBar"
   }) export default class TopBar extends Vue {
 
     protected onLogin (): void {
