@@ -33,13 +33,11 @@ public class AuthenticationServlet {
 	@GetMapping("/login")
 	public String login() {
 		val base = "https://discordapp.com/api/oauth2/authorize";
-		val redirect = "redirect_uri=" + secrets.getOAuthRedirect();
+		val redirect = "redirect_uri=" + Helper.encodeValue(secrets.getOAuthRedirect());
 		val clientId = "client_id=" + secrets.getClientId();
 		val scope = "scope=" + secrets.getOAuthScope();
 		val type = "response_type=code";
-
-		val string = base + "?" + clientId + "&" + redirect + "&" + scope + "&" + type;
-		return "redirect:" + Helper.encodeValue(string);
+		return "redirect:" + base + "?" + clientId + "&" + redirect + "&" + scope + "&" + type;
 	}
 
 	private static final class Helper {

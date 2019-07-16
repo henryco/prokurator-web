@@ -1,6 +1,7 @@
 package dev.tindersamurai.prokurator.configuration.security.auth.details;
 
 import dev.tindersamurai.prokurator.configuration.props.secrets.ProkuratorSecrets;
+import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DefaultDiscordUserDetails;
 import dev.tindersamurai.prokurator.discord.client.DiscordTokenExchangeRepository;
 import dev.tindersamurai.prokurator.discord.client.DiscordTokenExchangeRepository.TokenExchangeForm;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,8 @@ import lombok.val;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import static dev.tindersamurai.prokurator.configuration.security.auth.details.user.DiscordUserDetails.*;
 
 @Service @Slf4j
 public class DiscordDetailsService implements IDiscordDetailsService {
@@ -36,8 +39,13 @@ public class DiscordDetailsService implements IDiscordDetailsService {
 		);
 
 		val exchange = exchangeRepository.exchange(exchangeForm);
-		val token = exchange.getAccessToken();
 
-		return new DiscordUserDetails(token);
+		val token = new TokenDetails(
+				exchange.getAccessToken(),
+				exchange.getRefreshToken(),
+				exchange.getExpiresIn()
+		);
+
+		return new DefaultDiscordUserDetails("some_discord_id", token, "USER");
 	}
 }

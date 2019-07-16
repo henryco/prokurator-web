@@ -1,5 +1,8 @@
 package dev.tindersamurai.prokurator.configuration.security.filter;
 
+import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DefaultDiscordUserDetails;
+import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DiscordUserDetails;
+import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DiscordUserDetails.TokenDetails;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.TokenWhitelistException;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
 import dev.tindersamurai.prokurator.configuration.security.filter.props.JwtSecretProperties;
@@ -85,8 +88,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 						.map(authority -> new SimpleGrantedAuthority((String) authority))
 						.collect(Collectors.toList());
 
+				val d_token_access = (String) parsedToken.getBody().get("d_token_access");
+				val d_token_refresh = (String) parsedToken.getBody().get("d_token_refresh");
+				val d_token_expires = (Integer) parsedToken.getBody().get("d_token_expires");
+
 				if (StringUtils.isNotEmpty(username)) {
-					return new UsernamePasswordAuthenticationToken(username, null, authorities);
+					val details = new TokenDetails(d_token_access, d_token_refresh, d_token_expires);
+					val user = new DefaultDiscordUserDetails(username, details);
+					return new UsernamePasswordAuthenticationToken(user, null, authorities);
 				}
 			} catch (ExpiredJwtException e) {
 				log.warn("Request to parse expired JWT : {} failed : {}", token, e.getMessage());

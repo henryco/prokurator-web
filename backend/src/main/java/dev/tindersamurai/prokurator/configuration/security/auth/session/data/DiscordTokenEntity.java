@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+
+import java.util.Date;
+
+import static javax.persistence.TemporalType.TIMESTAMP;
 
 @Entity @Data
 @NoArgsConstructor
@@ -28,5 +30,13 @@ public class DiscordTokenEntity {
 			updatable = false,
 			length = 512
 	) String extraData;
+
+	private @Column(
+			name = "created",
+			nullable = false,
+			updatable = false
+	) @Temporal(
+			TIMESTAMP
+	) Date created;
 
 }

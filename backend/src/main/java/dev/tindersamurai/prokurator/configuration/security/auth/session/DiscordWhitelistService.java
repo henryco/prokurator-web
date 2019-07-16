@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Calendar;
 
 @Service @Slf4j
 public class DiscordWhitelistService implements WhitelistService {
@@ -25,6 +26,7 @@ public class DiscordWhitelistService implements WhitelistService {
 	@Override @Transactional
 	public void addTokenToWhiteList(@NonNull Serializable username, @NonNull String tokenId, String... optionalData) {
 		val token = new DiscordTokenEntity(); {
+			token.setCreated(Calendar.getInstance().getTime());
 			token.setUsername(username.toString());
 			token.setId(tokenId);
 

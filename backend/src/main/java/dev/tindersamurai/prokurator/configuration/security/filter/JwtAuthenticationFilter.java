@@ -1,5 +1,6 @@
 package dev.tindersamurai.prokurator.configuration.security.filter;
 
+import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DiscordUserDetails;
 import dev.tindersamurai.prokurator.configuration.security.auth.processor.AuthenticationProcessor;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
 import dev.tindersamurai.prokurator.configuration.security.filter.props.JwtSecretProperties;
@@ -11,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -56,9 +56,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 											FilterChain filterChain, Authentication authentication) {
-
-		log.debug("successfulAuthentication");
-		val user = ((UserDetails) authentication.getPrincipal());
+		val user = ((DiscordUserDetails) authentication.getPrincipal());
 		val roles = user.getAuthorities()
 				.stream()
 				.map(GrantedAuthority::getAuthority)
@@ -76,6 +74,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.setSubject(user.getUsername())
 				.setExpiration(createExpTime())
 				.claim("role", roles)
+				.claim("d_token_access", user.getToken().getAccess())
+				.claim("d_token_refresh", user.getToken().getRefresh())
+				.claim("d_token_expires", user.getToken().getExpires())
 				.compact();
 
 		response.addHeader(
