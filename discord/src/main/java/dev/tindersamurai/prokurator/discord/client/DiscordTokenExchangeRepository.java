@@ -21,6 +21,14 @@ public interface DiscordTokenExchangeRepository {
 		private String scope;
 	}
 
+	@Value class TokenRefreshForm {
+		private String refreshToken;
+		private String clientSecret;
+		private String redirectUrl;
+		private String clientId;
+		private String scope;
+	}
+
 	@Value class TokenResponse {
 		private @JsonProperty("access_token") String accessToken;
 		private @JsonProperty("refresh_token") String refreshToken;
@@ -29,18 +37,21 @@ public interface DiscordTokenExchangeRepository {
 		private @JsonProperty("scope") String scope;
 	}
 
-//	@POST("token") @FormUrlEncoded @Headers("Content-Type: application/x-www-form-urlencoded")
-//	Call<TokenResponse> _exchange(
-//			@Field("code") String code,
-//			@Field("grant_type") String type,
-//			@Field("client_id") String clientId,
-//			@Field("redirect_uri") String redirectUrl,
-//			@Field("client_secret") String clientSecret,
-//			@Field("scope") String scope
-//	);
-
 	@POST("token") @FormUrlEncoded @Headers("Content-Type: application/x-www-form-urlencoded")
 	Call<TokenResponse> _exchange(@FieldMap Map<String, String> fields);
+
+	default TokenResponse _exchange_(Map<String, String> map) {
+		try {
+			val response = this._exchange(map).execute();
+			if (!response.isSuccessful())
+				throw new RuntimeException("Cannot exchange discord token: "
+						+ (response.errorBody() == null ? "" : response.errorBody().string())
+				);
+			return response.body();
+		} catch (Exception e) {
+			throw new RuntimeException("Cannot exchange discord token", e);
+		}
+	}
 
 	default TokenResponse exchange(TokenExchangeForm data) {
 		val map = new HashMap<String, String>(); {
@@ -51,29 +62,18 @@ public interface DiscordTokenExchangeRepository {
 			map.put("client_secret", data.getClientSecret());
 			map.put("scope", data.getScope());
 		}
+		return _exchange_(map);
+	}
 
-		try {
-//			val call = this._exchange(
-//					data.getCode(),
-//					"authorization_code",
-//					data.getClientId(),
-//					data.getRedirectUrl(),
-//					data.getClientSecret(),
-//					data.getScope()
-//			);
-
-			val call = this._exchange(map);
-
-			val response = call.execute();
-
-			if (!response.isSuccessful())
-				throw new RuntimeException("Cannot exchange discord token: "
-						+ (response.errorBody() == null ? "" : response.errorBody().string())
-				);
-
-			return response.body();
-		} catch (Exception e) {
-			throw new RuntimeException("Cannot exchange discord token", e);
+	default TokenResponse refresh(TokenRefreshForm data) {
+		val map = new HashMap<String, String>(); {
+			map.put("client_id", data.getClientId());
+			map.put("client_secret", data.getClientSecret());
+			map.put("grant_type", "refresh_token");
+			map.put("refresh_token", data.getRefreshToken());
+			map.put("redirect_uri", data.getRedirectUrl());
+			map.put("scope", data.getScope());
 		}
+		return _exchange_(map);
 	}
 }
