@@ -30,7 +30,7 @@
       const router = this.$router.currentRoute
       const r_name = router.name
 
-      this.$cookies.set('router_cache', r_name);
+      localStorage.setItem('router_cache', `${r_name}`)
       window.location.href = "/login"
     }
   }

@@ -27,8 +27,7 @@
           config.headers["X-Requested-With"] = "XMLHttpRequest"
           if (!config.headers.Authorization) {
 
-            // @ts-ignore
-            const token = window.$cookies.get('Authorization')
+            const token = localStorage.getItem('Authorization')
             if (token) config.headers.Authorization = `${token}`
           }
           return config

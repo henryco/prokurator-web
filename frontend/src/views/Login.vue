@@ -13,14 +13,14 @@
       })
 
       const token = response.headers['authorization']
-      this.$cookies.set('Authorization', token)
+      localStorage.setItem('Authorization', token)
 
       if (!token)
         throw `Cannot authorize ${response}`
 
-      const lastPath = this.$cookies.get("router_cache");
+      const lastPath = localStorage.getItem('router_cache');
       if (lastPath) {
-        this.$cookies.remove("router_cache");
+        localStorage.removeItem('router_cache')
         this.$router.push({name: lastPath});
       }
     }
