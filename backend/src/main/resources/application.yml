@@ -15,3 +15,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+  cache:
+    cache-names: [user, guilds]
+    caffeine:
+      spec: maximumSize=10000,expireAfterWrite=60s

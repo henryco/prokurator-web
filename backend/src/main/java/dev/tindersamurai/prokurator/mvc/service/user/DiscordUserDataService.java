@@ -1,10 +1,12 @@
 package dev.tindersamurai.prokurator.mvc.service.user;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import dev.tindersamurai.prokurator.discord.client.DiscordUserInfoRepository;
 import dev.tindersamurai.prokurator.discord.client.DiscordUserInfoRepository.GuildsResponse;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +22,7 @@ public class DiscordUserDataService implements UserDataService {
 		this.userInfoRepository = userInfoRepository;
 	}
 
-	@Override
+	@Override @Cacheable(value="user", key = "#userAccessToken")
 	public UserData retrieveUserData(String userAccessToken) throws TokenExpiredException {
 		log.debug("retrieveUserData: {}", userAccessToken);
 		try {
@@ -31,7 +33,7 @@ public class DiscordUserDataService implements UserDataService {
 		}
 	}
 
-	@Override
+	@Override @Cacheable(value="guilds", key = "#userAccessToken")
 	public List<Guild> retrieveUserGuilds(String userAccessToken) throws TokenExpiredException {
 		log.debug("retrieveUserGuilds: {}", userAccessToken);
 		try {
