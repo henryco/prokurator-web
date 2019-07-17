@@ -3,7 +3,7 @@ package dev.tindersamurai.prokurator.configuration.security;
 import dev.tindersamurai.prokurator.configuration.security.ajax.AjaxAwareAuthEntryPoint;
 import dev.tindersamurai.prokurator.configuration.security.auth.processor.AuthenticationProcessor;
 import dev.tindersamurai.prokurator.configuration.security.auth.processor.DiscordAuthProcessor;
-import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
+import dev.tindersamurai.prokurator.configuration.security.auth.session.service.whitelist.TokenWhitelistService;
 import dev.tindersamurai.prokurator.configuration.security.filter.JwtAuthenticationFilter;
 import dev.tindersamurai.prokurator.configuration.security.filter.JwtAuthorizationFilter;
 
@@ -34,13 +34,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private final AuthenticationManager authenticationManager;
 	private final JwtSecretProperties secretProperties;
-	private final WhitelistService whitelistService;
+	private final TokenWhitelistService whitelistService;
 
 	@Autowired
 	public SecurityConfiguration(
 			AuthenticationManager authenticationManager,
 			JwtSecretProperties secretProperties,
-			WhitelistService whitelistService
+			TokenWhitelistService whitelistService
 	) {
 		this.authenticationManager = authenticationManager;
 		this.secretProperties = secretProperties;

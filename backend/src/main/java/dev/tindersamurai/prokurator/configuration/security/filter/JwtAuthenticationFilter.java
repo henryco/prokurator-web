@@ -2,7 +2,7 @@ package dev.tindersamurai.prokurator.configuration.security.filter;
 
 import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DiscordUserDetails;
 import dev.tindersamurai.prokurator.configuration.security.auth.processor.AuthenticationProcessor;
-import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
+import dev.tindersamurai.prokurator.configuration.security.auth.session.service.whitelist.TokenWhitelistService;
 import dev.tindersamurai.prokurator.configuration.security.filter.props.JwtSecretProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,19 +20,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-import static dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService.*;
+import static dev.tindersamurai.prokurator.configuration.security.auth.session.service.whitelist.TokenWhitelistService.*;
 
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private final AuthenticationProcessor authenticationProcessor;
 	private final JwtSecretProperties jwtSecretProperties;
-	private @Setter WhitelistService whitelistService;
+	private @Setter
+	TokenWhitelistService whitelistService;
 
 	public JwtAuthenticationFilter(
 			AuthenticationProcessor authenticationProcessor,
 			JwtSecretProperties jwtSecretProperties,
-			WhitelistService whitelistService,
+			TokenWhitelistService whitelistService,
 			String filterProcessUrl
 	) {
 		this(authenticationProcessor, jwtSecretProperties, filterProcessUrl);

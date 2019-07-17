@@ -1,8 +1,9 @@
 package dev.tindersamurai.prokurator.configuration.security.filter;
 
+import dev.tindersamurai.prokurator.configuration.security.auth.credentials.DiscordTokenPrincipal;
 import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DefaultDiscordUserDetails;
-import dev.tindersamurai.prokurator.configuration.security.auth.session.TokenWhitelistException;
-import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
+import dev.tindersamurai.prokurator.configuration.security.auth.session.exception.TokenWhitelistException;
+import dev.tindersamurai.prokurator.configuration.security.auth.session.service.whitelist.TokenWhitelistService;
 import dev.tindersamurai.prokurator.configuration.security.filter.props.JwtSecretProperties;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -31,12 +32,13 @@ import java.util.stream.Collectors;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 	private final JwtSecretProperties jwtSecretProperties;
-	private @Setter WhitelistService whitelistService;
+	private @Setter
+	TokenWhitelistService whitelistService;
 
 	public JwtAuthorizationFilter(
 			AuthenticationManager authenticationManager,
 			JwtSecretProperties jwtSecretProperties,
-			WhitelistService whitelistService
+			TokenWhitelistService whitelistService
 	) {
 		this(authenticationManager, jwtSecretProperties);
 		this.whitelistService = whitelistService;
@@ -84,11 +86,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 				val authorities = ((List<?>) parsedToken.getBody().get("role")).stream()
 						.map(a -> new SimpleGrantedAuthority((String) a)).collect(Collectors.toList());
 
-				val authStrings = ((List<?>) parsedToken.getBody().get("role")).stream()
-						.map(a -> ((String) a)).toArray(String[]::new);
-
 				if (StringUtils.isNotEmpty(username)) {
-					val user = new DefaultDiscordUserDetails(username, tokenId, authStrings);
+					val user = new DiscordTokenPrincipal(username, tokenId);
 					return new UsernamePasswordAuthenticationToken(user, null, authorities);
 				}
 			} catch (ExpiredJwtException e) {

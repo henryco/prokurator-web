@@ -1,6 +1,6 @@
 package dev.tindersamurai.prokurator.configuration.security.filter;
 
-import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
+import dev.tindersamurai.prokurator.configuration.security.auth.session.service.whitelist.TokenWhitelistService;
 import dev.tindersamurai.prokurator.configuration.security.filter.props.JwtSecretProperties;
 import io.jsonwebtoken.Jwts;
 import io.micrometer.core.instrument.util.StringUtils;
@@ -23,12 +23,13 @@ import java.io.IOException;
 public class JwtLogoutFilter extends OncePerRequestFilter {
 
 	private final JwtSecretProperties jwtSecretProperties;
-	private @Setter WhitelistService whitelistService;
+	private @Setter
+	TokenWhitelistService whitelistService;
 	private RequestMatcher requestMatcher;
 
 	public JwtLogoutFilter(
 			JwtSecretProperties jwtSecretProperties,
-			WhitelistService whitelistService,
+			TokenWhitelistService whitelistService,
 			String logoutUrl
 	) {
 		this(jwtSecretProperties, logoutUrl);

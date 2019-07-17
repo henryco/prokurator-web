@@ -1,17 +1,18 @@
-package dev.tindersamurai.prokurator.configuration.security.auth.session;
+package dev.tindersamurai.prokurator.configuration.security.auth.session.service.whitelist;
 
+import dev.tindersamurai.prokurator.configuration.security.auth.session.exception.TokenWhitelistException;
 import lombok.Value;
 import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 
-public interface WhitelistService {
+public interface TokenWhitelistService {
 
 	@Value class Token {
 		private String tokenId;
 		private String access;
 		private String refresh;
-		private long expired;
+		private long expires;
 	}
 
 	void addTokenToWhiteList(@NonNull Serializable userId, @NonNull Token token, String ... optionalData);

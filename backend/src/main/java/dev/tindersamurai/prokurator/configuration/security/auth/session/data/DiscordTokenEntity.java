@@ -40,11 +40,11 @@ public class DiscordTokenEntity {
 	) Date created;
 
 	private @Column(
-			name = "expired",
+			name = "expires",
 			nullable = false
 	) @Temporal(
 			TIMESTAMP
-	) Date expired;
+	) Date expires;
 
 	private @Column(
 			name = "refresh",

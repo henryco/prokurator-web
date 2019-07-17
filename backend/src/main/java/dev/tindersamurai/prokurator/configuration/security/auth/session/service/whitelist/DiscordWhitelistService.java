@@ -1,4 +1,4 @@
-package dev.tindersamurai.prokurator.configuration.security.auth.session;
+package dev.tindersamurai.prokurator.configuration.security.auth.session.service.whitelist;
 
 import dev.tindersamurai.prokurator.configuration.security.auth.session.data.DiscordTokenEntity;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.data.DiscordTokenRepository;
@@ -15,7 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Service @Slf4j
-public class DiscordWhitelistService implements WhitelistService {
+public class DiscordWhitelistService implements TokenWhitelistService {
 
 	private final DiscordTokenRepository tokenRepository;
 
@@ -27,9 +27,10 @@ public class DiscordWhitelistService implements WhitelistService {
 
 	@Override @Transactional
 	public void addTokenToWhiteList(Serializable userId, Token data, String... optionalData) {
+		log.debug("addTokenToWhiteList: {}, {}, {}", userId, data, optionalData);
 		val token = new DiscordTokenEntity(); {
 			token.setCreated(Calendar.getInstance().getTime());
-			token.setExpired(new Date(data.getExpired()));
+			token.setExpires(new Date(data.getExpires()));
 			token.setUserId(userId.toString());
 			token.setRefreshToken(data.getRefresh());
 			token.setAccessToken(data.getAccess());
@@ -45,6 +46,7 @@ public class DiscordWhitelistService implements WhitelistService {
 
 	@Override @Transactional
 	public boolean isTokenPresent(String tokenId) {
+		log.debug("isTokenPresent: {}", tokenId);
 		if (tokenId == null || tokenId.isEmpty())
 			return false;
 		return tokenRepository.existsById(tokenId);
@@ -52,11 +54,13 @@ public class DiscordWhitelistService implements WhitelistService {
 
 	@Override  @Transactional
 	public void removeToken(@NonNull String tokenId) {
+		log.debug("removeToken: {}", tokenId);
 		tokenRepository.deleteById(tokenId);
 	}
 
 	@Override @Transactional
 	public void removeAllUserTokens(@NonNull Serializable userId) {
+		log.debug("removeAllUserToken: {}", userId);
 		tokenRepository.deleteAllByUserId(userId.toString());
 	}
 }
