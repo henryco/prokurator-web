@@ -10,14 +10,15 @@ import java.util.Collections;
 public interface DiscordUserDetails extends UserDetails {
 
 	@Value class TokenDetails {
+		private String tokenId;
 		private String access;
 		private String refresh;
-		private long expires;
+		private Long expires;
 	}
 
-	String getDiscordId();
+	TokenDetails getTokenDetails();
 
-	TokenDetails getToken();
+	String getDiscordId();
 
 	@Override
 	default String getUsername() {

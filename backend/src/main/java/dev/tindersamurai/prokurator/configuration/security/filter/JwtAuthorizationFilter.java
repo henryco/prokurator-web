@@ -1,7 +1,6 @@
 package dev.tindersamurai.prokurator.configuration.security.filter;
 
 import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DefaultDiscordUserDetails;
-import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DiscordUserDetails.TokenDetails;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.TokenWhitelistException;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService;
 import dev.tindersamurai.prokurator.configuration.security.filter.props.JwtSecretProperties;
@@ -76,25 +75,20 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 						.setSigningKey(signingKey)
 						.parseClaimsJws(token.replace(jwtSecretProperties.getJwtTokenPrefix(), ""));
 
-				val username = parsedToken
-						.getBody()
-						.getSubject();
+				val username = parsedToken.getBody().getSubject();
+				val tokenId = parsedToken.getBody().getId();
 
 				if (whitelistService != null)
-					whitelistService.tokenShouldPresent(parsedToken.getBody().getId());
+					whitelistService.tokenShouldPresent(tokenId);
 
-				val authorities = ((List<?>) parsedToken.getBody()
-						.get("role")).stream()
-						.map(authority -> new SimpleGrantedAuthority((String) authority))
-						.collect(Collectors.toList());
+				val authorities = ((List<?>) parsedToken.getBody().get("role")).stream()
+						.map(a -> new SimpleGrantedAuthority((String) a)).collect(Collectors.toList());
 
-				val d_token_access = (String) parsedToken.getBody().get("d_token_access");
-				val d_token_refresh = (String) parsedToken.getBody().get("d_token_refresh");
-				val d_token_expires = (Integer) parsedToken.getBody().get("d_token_expires");
+				val authStrings = ((List<?>) parsedToken.getBody().get("role")).stream()
+						.map(a -> ((String) a)).toArray(String[]::new);
 
 				if (StringUtils.isNotEmpty(username)) {
-					val details = new TokenDetails(d_token_access, d_token_refresh, d_token_expires);
-					val user = new DefaultDiscordUserDetails(username, details);
+					val user = new DefaultDiscordUserDetails(username, tokenId, authStrings);
 					return new UsernamePasswordAuthenticationToken(user, null, authorities);
 				}
 			} catch (ExpiredJwtException e) {

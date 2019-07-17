@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 import static dev.tindersamurai.prokurator.configuration.security.auth.details.user.DiscordUserDetails.*;
 
@@ -46,6 +47,7 @@ public class DiscordDetailsService implements IDiscordDetailsService {
 		val exchange = exchangeRepository.exchange(exchangeForm);
 
 		val token = new TokenDetails(
+				UUID.randomUUID().toString(),
 				exchange.getAccessToken(),
 				exchange.getRefreshToken(),
 				now() + exchange.getExpiresIn()

@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DiscordTokenRepository extends JpaRepository<DiscordTokenEntity, String> {
 
-	void deleteAllByUsername(String username);
+	void deleteAllByUserId(String username);
 }

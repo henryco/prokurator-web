@@ -20,10 +20,10 @@ public class DiscordTokenEntity {
 	) String id;
 
 	private @Column(
-			name = "username",
+			name = "user_id",
 			nullable = false,
 			updatable = false
-	) String username;
+	) String userId;
 
 	private @Column(
 			name = "extra_data",
@@ -39,4 +39,20 @@ public class DiscordTokenEntity {
 			TIMESTAMP
 	) Date created;
 
+	private @Column(
+			name = "expired",
+			nullable = false
+	) @Temporal(
+			TIMESTAMP
+	) Date expired;
+
+	private @Column(
+			name = "refresh",
+			nullable = false
+	) String refreshToken;
+
+	private @Column(
+			name = "token",
+			nullable = false
+	) String accessToken;
 }

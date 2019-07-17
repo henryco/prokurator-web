@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 @Service @Slf4j
 public class DiscordWhitelistService implements WhitelistService {
@@ -23,12 +24,16 @@ public class DiscordWhitelistService implements WhitelistService {
 		this.tokenRepository = tokenRepository;
 	}
 
+
 	@Override @Transactional
-	public void addTokenToWhiteList(@NonNull Serializable username, @NonNull String tokenId, String... optionalData) {
+	public void addTokenToWhiteList(Serializable userId, Token data, String... optionalData) {
 		val token = new DiscordTokenEntity(); {
 			token.setCreated(Calendar.getInstance().getTime());
-			token.setUsername(username.toString());
-			token.setId(tokenId);
+			token.setExpired(new Date(data.getExpired()));
+			token.setUserId(userId.toString());
+			token.setRefreshToken(data.getRefresh());
+			token.setAccessToken(data.getAccess());
+			token.setId(data.getTokenId());
 
 			if (optionalData != null) {
 				val reduce = Arrays.stream(optionalData).reduce((s, s2) -> s + " | " + s2);
@@ -51,7 +56,7 @@ public class DiscordWhitelistService implements WhitelistService {
 	}
 
 	@Override @Transactional
-	public void removeAllUserTokens(@NonNull Serializable username) {
-		tokenRepository.deleteAllByUsername(username.toString());
+	public void removeAllUserTokens(@NonNull Serializable userId) {
+		tokenRepository.deleteAllByUserId(userId.toString());
 	}
 }

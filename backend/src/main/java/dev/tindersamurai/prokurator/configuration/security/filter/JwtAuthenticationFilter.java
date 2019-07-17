@@ -18,8 +18,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
-import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static dev.tindersamurai.prokurator.configuration.security.auth.session.WhitelistService.*;
 
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -63,20 +64,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.collect(Collectors.toList());
 
 		val signingKey = jwtSecretProperties.getJwtSecretKey().getBytes();
-		val tokenId = UUID.randomUUID().toString();
 
 		val token = Jwts.builder()
 				.signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
 				.setHeaderParam("type", jwtSecretProperties.getJwtTokenType())
-				.setId(tokenId)
+				.setId(user.getTokenDetails().getTokenId())
 				.setIssuer(jwtSecretProperties.getJwtTokenIssuer())
 				.setAudience(jwtSecretProperties.getJwtTokenAudience())
 				.setSubject(user.getUsername())
 				.setExpiration(createExpTime())
 				.claim("role", roles)
-				.claim("d_token_access", user.getToken().getAccess())
-				.claim("d_token_refresh", user.getToken().getRefresh())
-				.claim("d_token_expires", user.getToken().getExpires())
 				.compact();
 
 		response.addHeader(
@@ -84,8 +81,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				jwtSecretProperties.getJwtTokenPrefix() + token
 		);
 
-		if (whitelistService != null)
-			whitelistService.addTokenToWhiteList(user.getUsername(), tokenId);
+		if (whitelistService != null) {
+			val d = user.getTokenDetails();
+			val data = new Token(d.getTokenId(), d.getAccess(), d.getRefresh(), d.getExpires());
+			whitelistService.addTokenToWhiteList(user.getUsername(), data);
+		}
 	}
 
 	private Date createExpTime() {
