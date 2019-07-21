@@ -36,3 +36,7 @@ etc
 resources/static
 secrets.properties
 jwt.properties
+.project
+.settings
+.factorypath
+.classpath
