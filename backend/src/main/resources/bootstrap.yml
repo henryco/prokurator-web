@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: prokurator-web
+  cloud:
+    config:
+      uri: https://config.tindersamurai.dev
