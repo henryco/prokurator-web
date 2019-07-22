@@ -1,6 +1,5 @@
 package dev.tindersamurai.prokurator.mvc.service.user;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
 import dev.tindersamurai.prokurator.discord.client.DiscordUserInfoRepository;
 import dev.tindersamurai.prokurator.discord.client.DiscordUserInfoRepository.GuildsResponse;
 import lombok.extern.slf4j.Slf4j;
