@@ -1,4 +1,4 @@
-package dev.tindersamurai.prokurator.discord.client.util;
+package dev.tindersamurai.prokurator.discord.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

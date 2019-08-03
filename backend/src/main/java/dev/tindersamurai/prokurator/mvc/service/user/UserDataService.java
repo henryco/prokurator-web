@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserDataService {
 
 	final class TokenExpiredException extends Exception {
-		public TokenExpiredException(String token) {
+		TokenExpiredException(String token) {
 			super("Token expired: " + token);
 		}
 	}
@@ -33,6 +33,8 @@ public interface UserDataService {
 	}
 
 	UserData retrieveUserData(String userAccessToken) throws TokenExpiredException;
+
+	UserData retrieveUserData(String userAccessToken, String userId) throws TokenExpiredException;
 
 	List<Guild> retrieveUserGuilds(String userAccessToken) throws TokenExpiredException;
 }

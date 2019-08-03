@@ -2,9 +2,9 @@ package dev.tindersamurai.prokurator.configuration.security.auth.details;
 
 import dev.tindersamurai.prokurator.configuration.props.secrets.ProkuratorSecrets;
 import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DefaultDiscordUserDetails;
-import dev.tindersamurai.prokurator.discord.client.DiscordTokenExchangeRepository;
-import dev.tindersamurai.prokurator.discord.client.DiscordTokenExchangeRepository.TokenExchangeForm;
-import dev.tindersamurai.prokurator.discord.client.DiscordUserInfoRepository;
+import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository;
+import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository.TokenExchangeForm;
+import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -2,8 +2,8 @@ package dev.tindersamurai.prokurator.configuration.security.auth.session.service
 
 import dev.tindersamurai.prokurator.configuration.props.secrets.ProkuratorSecrets;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.data.DiscordTokenRepository;
-import dev.tindersamurai.prokurator.discord.client.DiscordTokenExchangeRepository;
-import dev.tindersamurai.prokurator.discord.client.DiscordTokenExchangeRepository.TokenRefreshForm;
+import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository;
+import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository.TokenRefreshForm;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;

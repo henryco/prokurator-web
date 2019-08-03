@@ -1,9 +1,9 @@
-package dev.tindersamurai.prokurator.discord.client;
+package dev.tindersamurai.prokurator.discord;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.GsonBuilder;
-import dev.tindersamurai.prokurator.discord.client.util.BaseURL;
+import dev.tindersamurai.prokurator.discord.util.BaseURL;
 import lombok.NonNull;
 import lombok.val;
 import okhttp3.OkHttpClient;
