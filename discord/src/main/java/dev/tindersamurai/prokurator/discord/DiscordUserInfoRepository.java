@@ -35,7 +35,7 @@ public interface DiscordUserInfoRepository {
 		private String permissions;
 	}
 
-	@GET("/{uid}")
+	@GET("{uid}")
 	Call<UserResponse> _user(@Header("Authorization") String authorization, @Path("uid") String uid);
 
 	@GET("@me/guilds")
