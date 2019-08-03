@@ -1,11 +1,12 @@
-package dev.tindersamurai.prokurator.discord.client;
+package dev.tindersamurai.prokurator.discord;
 
-import dev.tindersamurai.prokurator.discord.client.util.BaseURL;
+import dev.tindersamurai.prokurator.discord.util.BaseURL;
 import lombok.Value;
 import lombok.val;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Path;
 
 import java.util.List;
 
@@ -34,16 +35,20 @@ public interface DiscordUserInfoRepository {
 		private String permissions;
 	}
 
-	@GET("@me")
-	Call<UserResponse> _user(@Header("Authorization") String authorization);
+	@GET("{uid}")
+	Call<UserResponse> _user(@Header("Authorization") String authorization, @Path("uid") String uid);
 
 	@GET("@me/guilds")
 	Call<List<GuildsResponse>> _guilds(@Header("Authorization") String authorization);
 
 
 	default UserResponse getUserInfo(String token) {
+		return getUserInfo(token, "@me");
+	}
+
+	default UserResponse getUserInfo(String token, String uid) {
 		try {
-			val response = _user("Bearer " + token).execute();
+			val response = _user("Bearer " + token, uid).execute();
 			if (!response.isSuccessful())
 				throw new RuntimeException("Cannot exchange user info: "
 						+ (response.errorBody() == null ? "" : response.errorBody().string())

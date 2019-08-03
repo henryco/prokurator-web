@@ -34,6 +34,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.bitbucket.tinder-samurai.prokurator-backend</groupId>
+            <artifactId>commons</artifactId>
+            <version>0.0.4-alpha</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
             <version>1.20</version>
@@ -216,6 +222,10 @@
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
             <url>https://repo.spring.io/milestone</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 

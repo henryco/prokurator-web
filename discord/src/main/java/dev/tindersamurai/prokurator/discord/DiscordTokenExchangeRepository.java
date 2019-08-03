@@ -1,7 +1,7 @@
-package dev.tindersamurai.prokurator.discord.client;
+package dev.tindersamurai.prokurator.discord;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dev.tindersamurai.prokurator.discord.client.util.BaseURL;
+import dev.tindersamurai.prokurator.discord.util.BaseURL;
 import lombok.Value;
 import lombok.val;
 import retrofit2.Call;

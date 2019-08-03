@@ -1,7 +1,7 @@
 package dev.tindersamurai.prokurator.mvc.service.user;
 
-import dev.tindersamurai.prokurator.discord.client.DiscordUserInfoRepository;
-import dev.tindersamurai.prokurator.discord.client.DiscordUserInfoRepository.GuildsResponse;
+import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository;
+import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository.GuildsResponse;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +21,22 @@ public class DiscordUserDataService implements UserDataService {
 		this.userInfoRepository = userInfoRepository;
 	}
 
-	@Override @Cacheable(value="user", key = "#userAccessToken")
+	@Override @Cacheable(value="self", key = "#userAccessToken")
 	public UserData retrieveUserData(String userAccessToken) throws TokenExpiredException {
 		log.debug("retrieveUserData: {}", userAccessToken);
 		try {
 			val r = userInfoRepository.getUserInfo(userAccessToken);
+			return new UserData(r.getId(), r.getUsername(), r.getDiscriminator(), r.getAvatar());
+		} catch (Exception e) {
+			throw new TokenExpiredException(userAccessToken);
+		}
+	}
+
+	@Override @Cacheable(value="user", key = "#userId")
+	public UserData retrieveUserData(String userAccessToken, String userId) throws TokenExpiredException {
+		log.debug("retrieveUserData: {}, {}", userAccessToken, userId);
+		try {
+			val r = userInfoRepository.getUserInfo(userAccessToken, userId);
 			return new UserData(r.getId(), r.getUsername(), r.getDiscriminator(), r.getAvatar());
 		} catch (Exception e) {
 			throw new TokenExpiredException(userAccessToken);

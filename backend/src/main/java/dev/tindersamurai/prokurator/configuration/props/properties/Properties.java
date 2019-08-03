@@ -14,4 +14,9 @@ public class Properties implements ProkuratorProperties {
 	public Properties(Environment environment) {
 		this.environment = environment;
 	}
+
+	@Override
+	public String getBackendServiceUrl() {
+		return environment.getRequiredProperty("prokurator.services.backend");
+	}
 }
