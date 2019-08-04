@@ -1,46 +1,22 @@
 <template>
-  <v-app>
-    <top-bar/>
-    <v-layout row pb-2>
-      <v-flex xs8 offset-xs2>
-        <router-view/>
-      </v-flex>
-    </v-layout>
-  </v-app>
+  <div id="app">
+    <router-view/>
+  </div>
 </template>
 
 <script lang="ts">
-  import Vue from "vue"
+  import AuthRequestMixin from '@/util/AuthRequestMixin'
+  import Vue from 'vue'
 
-  import TopBar from "@/components/TopBar.vue"
-  import axios from 'axios'
-
-  export default Vue.extend({
-    name: 'App',
-    components: {
-      TopBar
-    },
-
-    beforeCreate(): void {
-      axios.interceptors.request.use(
-        (config) => {
-          config.headers["X-Requested-With"] = "XMLHttpRequest"
-          if (!config.headers.Authorization) {
-
-            const token = localStorage.getItem('Authorization')
-            if (token) config.headers.Authorization = `${token}`
-          }
-          return config
-        },
-        error => Promise.reject(error)
-      )
-    }
-
-  })
+	export default Vue.extend({
+		name: 'app',
+    mixins: [AuthRequestMixin]
+	})
 </script>
 
 <style lang="scss">
-  html {
-    overflow-y: auto !important;
+  body {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
   }
 </style>

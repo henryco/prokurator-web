@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import Main from '@/views/Main.vue'
-import Login from '@/views/Login.vue'
+import Auth from '@/views/Auth.vue'
 
 Vue.use(Router)
 
@@ -15,7 +16,7 @@ export default new Router({
     {
       path: '/auth',
       name: 'auth',
-      component: Login
+      component: Auth
     }
   ]
 })
