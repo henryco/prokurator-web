@@ -1,13 +1,13 @@
 <template>
   <div class="servers-view">
     <prk-infinity-scroll @fetch="load">
-
+      <!--TODO-->
     </prk-infinity-scroll>
   </div>
 </template>
 
 <script lang="ts">
-  import PrkInfinityScroll from "@/components/scroll/PrkInfinityScroll.vue";
+  import PrkInfinityScroll, {LoadEvent} from "@/components/scroll"
   import Vue from 'vue';
 
   export default Vue.extend({
@@ -23,7 +23,7 @@
       }
     },
     methods: {
-      load (event: any): void {
+      load (event: LoadEvent): void {
         this.d_count += 1
       }
     }

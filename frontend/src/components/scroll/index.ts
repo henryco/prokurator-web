@@ -20,3 +20,6 @@ export {LoadEvent}
 const INFINITY: string = 'infinity'
 const EVENT: string = 'fetch';
 export {EVENT, INFINITY}
+
+import PrkInfinityScroll from "./PrkInfinityScroll.vue";
+export default PrkInfinityScroll;
