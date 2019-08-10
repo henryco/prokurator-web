@@ -63,8 +63,9 @@
       },
 
       _servers: function(): void {
-        alert('servers')
-        // TODO
+        this.$router.push({
+          name: 'servers'
+        })
       },
 
       _logout: function (): void {
