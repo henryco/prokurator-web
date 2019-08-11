@@ -1,22 +1,19 @@
 <template>
-  <el-container class="main-view">
-    main
-  </el-container>
+  <div class="account-view">
+    account
+  </div>
 </template>
 
 <script lang="ts">
-  import Vue from 'vue'
+  import Vue from 'vue';
 
   export default Vue.extend({
-    name: 'Main',
-    components: {
-
-    }
-  })
+    name: "Account"
+  });
 </script>
 
 <style scoped lang="scss">
-  .main-view {
+  .account-view {
     position: relative;
     width: 100%;
     height: 100%;

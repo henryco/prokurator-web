@@ -30,6 +30,17 @@ public class AuthenticationServlet {
 		return "redirect:/#/auth?code=" + code;
 	}
 
+	@GetMapping("/auth/add")
+	public String authAdd(@RequestParam("id") String id) {
+		val base = "https://discordapp.com/api/oauth2/authorize";
+		val perms = "permissions=8";
+		val scope = "scope=bot";
+		val redirect = "redirect_uri=" + Helper.encodeValue(secrets.getOAuthRedirect());
+		val clientId = "client_id=" + secrets.getClientId();
+		val guildId = "guild_id=" + id;
+		return "redirect:" + base + "?" + clientId + "&" + perms + "&" + scope + "&" + redirect + "&" + guildId;
+	}
+
 	@GetMapping("/login")
 	public String login() {
 		val base = "https://discordapp.com/api/oauth2/authorize";

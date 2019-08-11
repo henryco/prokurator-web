@@ -10,13 +10,15 @@
 </template>
 
 <script lang="ts">
-  import AuthRequestMixin from '@/util/AuthRequestMixin'
+  import LoaderMixin from "@/utils/LoaderMixin";
+  import I8NMixin from "@/i8n"
+  import ApiMixin from '@/api'
   import TopBar from "@/composites/TopBar.vue";
   import Vue from 'vue'
 
 	export default Vue.extend({
 		name: 'app',
-    mixins: [AuthRequestMixin],
+    mixins: [LoaderMixin, ApiMixin, I8NMixin],
     components: {
 		  TopBar
     }
