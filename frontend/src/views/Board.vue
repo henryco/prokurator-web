@@ -1,42 +1,46 @@
 <template>
-  <div class="servers-view">
+  <div class="board-view">
+
+    <div class="top">
+      board: {{c_boardId}}
+    </div>
+
     <prk-infinity-scroll @fetch="load">
-      <div v-for="g in d_guilds" :key="g.id">
-        {{g}}
-      </div>
+
     </prk-infinity-scroll>
+
   </div>
 </template>
 
 <script lang="ts">
-  import PrkInfinityScroll from "@/components/scroll"
   import {ElLoadingComponent} from "element-ui/types/loading";
-  import {GuildForm} from "@/api/general/PrkGeneralApi"
+  import PrkInfinityScroll from "@/components/scroll"
+
   import Vue from 'vue';
 
   declare interface Data {
     d_loading?: ElLoadingComponent,
-    d_guilds: GuildForm[]
   }
 
   export default Vue.extend({
-    name: "Servers",
+    name: "Board",
 
     components: {
       PrkInfinityScroll
     },
 
-    data(): Data {
-      return {
-        d_loading: undefined,
-        d_guilds: [],
+    data: () => (<Data> {
+      d_loading: undefined
+    }),
+
+    computed: {
+      c_boardId: function () {
+        return this.$route.params.id
       }
     },
 
     methods: {
       async load() {
-        const api = await this.api().general;
-        this.d_guilds = await api.getAvailableGuilds()
 
         if (this.d_loading) {
           this.d_loading.close()
@@ -46,18 +50,17 @@
     },
 
     mounted(): void {
-      this.d_loading = this.loadingService({fullscreen: true});
+      this.d_loading = this.loadingService({
+        fullscreen: true
+      })
     }
   });
 </script>
 
 <style scoped lang="scss">
-
-  .servers-view {
+  .board-view {
     position: relative;
-    height: 100%;
     width: 100%;
+    height: 100%;
   }
-
-
 </style>

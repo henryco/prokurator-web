@@ -1,7 +1,7 @@
 <template>
   <prk-top-bar class="top-bar">
 
-    <div class="fonted" slot="left">
+    <div class="fonted left-box" slot="left" @click="_home">
       <span class="title">Prokurator</span>
     </div>
 
@@ -10,8 +10,8 @@
       <el-dropdown class="menu" trigger="click" @command="_onAccountMenuClick" v-else>
 
         <div class="account-box">
-          <el-avatar fit="cover" :src="c_accountIcon"></el-avatar>
-          <span class="fonted acc-name">{{c_accountName}}</span>
+          <el-avatar fit="cover" :src="usericon"></el-avatar>
+          <span class="fonted acc-name">{{username}}</span>
         </div>
 
         <el-dropdown-menu slot="dropdown">
@@ -30,6 +30,11 @@
   import PrkTopBar from "@/components/PrkTopBar.vue";
   import Vue from 'vue';
 
+  interface Data {
+    username?: string;
+    usericon?: string;
+  }
+
   export default Vue.extend({
     name: "TopBar",
     components: {
@@ -37,16 +42,10 @@
       PrkTopBar
     },
 
-    computed: {
-      c_accountName: function () {
-        // TODO
-        return "Account"
-      },
-      c_accountIcon: function () {
-        // TODO
-        return "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-      }
-    },
+   data: () =>(<Data> {
+     usericon: undefined,
+     username: ''
+   }),
 
     methods: {
       _onAccountMenuClick: function (option: string) {
@@ -57,9 +56,16 @@
         }
       },
 
+      _home: function(): void {
+        this.$router.push({
+          name: 'main'
+        })
+      },
+
       _account: function(): void {
-        alert('account')
-        // TODO
+        this.$router.push({
+          name: 'account'
+        })
       },
 
       _servers: function(): void {
@@ -71,7 +77,19 @@
       _logout: function (): void {
         this.removeAuthorization()
         window.location.href = "/"
+      },
+
+      _fetchUserData: async function () {
+        if (!this.isAuthorized()) return;
+
+        const user = await this.api().general.getUserInfo();
+        this.username = user.name
+        this.usericon = user.icon
       }
+    },
+
+    mounted(): void {
+      this.$nextTick(async () => this._fetchUserData())
     }
   });
 </script>
@@ -91,6 +109,10 @@
     .fonted {
       font-family: "Helvetica Neue", Helvetica, "DejaVu Sans Light", Arial, sans-serif;
       color: #606266;
+    }
+
+    .left-box {
+      cursor: pointer;
     }
 
     .title {

@@ -11,9 +11,21 @@ export default class MockGeneralApi implements GeneralApi {
     return [
       {
         name: 'Dangerous Boy',
-        id: '2334534534',
+        id: '2994534534',
         icon: 'https://cdn.discordapp.com/icons/448453867814780930/95f695f6c3a481687633a0dafb678033.jpg',
         installed: true
+      },
+      {
+        name: 'Dangerous Boy',
+        id: '2334515434',
+        icon: 'https://cdn.discordapp.com/icons/448453867814780930/95f695f6c3a481687633a0dafb678033.jpg',
+        installed: true
+      },
+      {
+        name: 'Dangerous Boy',
+        id: '2334557334',
+        icon: 'https://cdn.discordapp.com/icons/448453867814780930/95f695f6c3a481687633a0dafb678033.jpg',
+        installed: false
       }
     ];
   }
