@@ -1,6 +1,6 @@
 interface IdEntity {
+  icon?: string;
   name: string;
-  icon: string;
   id: string;
 }
 

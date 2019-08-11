@@ -15,9 +15,9 @@
         </div>
 
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item icon="el-icon-user" command="account">My Account</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-connection" command="servers">Servers</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-switch-button" command="logout">Logout</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-user" command="account">{{strings.account}}</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-connection" command="servers">{{strings.servers}}</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-switch-button" command="logout">{{strings.logout}}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </template>
