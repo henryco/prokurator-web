@@ -2,7 +2,11 @@ import Vue from 'vue';
 
 const AUTH_PROP_NAME = 'Authorization'
 
-declare interface AuthorizationMixin {
+declare interface AuthorizationMixinData {
+  authorization?: string;
+}
+
+declare interface AuthorizationMixin extends AuthorizationMixinData{
   authorize(token: string): void;
   removeAuthorization(): void;
   getAuthorization(): string | null;
@@ -15,24 +19,43 @@ declare module 'vue/types/vue' {
 
 export default Vue.mixin(Vue.extend({
   name: 'AuthorizationStoreMixin',
+
+  data: function () {
+    return <AuthorizationMixinData> {
+      get authorization (): string | undefined {
+        return localStorage.getItem(AUTH_PROP_NAME) || undefined
+      },
+      set authorization (value: string | undefined) {
+        if (value === undefined)
+          localStorage.removeItem(AUTH_PROP_NAME)
+        else localStorage.setItem(AUTH_PROP_NAME, value)
+      }
+    }
+  },
+
   methods: <AuthorizationMixin> {
     authorize: function (token: string): void {
       if (token === null || token === undefined)
         throw "There is no authorization token!"
-      localStorage.setItem(AUTH_PROP_NAME, token)
+      this.authorization = token;
     },
 
     removeAuthorization: function (): void {
-      localStorage.removeItem(AUTH_PROP_NAME)
+      this.authorization = undefined;
     },
 
     getAuthorization: function (): string | null {
-      return localStorage.getItem(AUTH_PROP_NAME)
+      return this.authorization || null
     },
 
     isAuthorized: function (): boolean {
-      const a = localStorage.getItem(AUTH_PROP_NAME)
-      return a !== null && a !== undefined
+      return this.authorization !== undefined;
+    }
+  },
+
+  watch: {
+    authorization: function (v) {
+      console.log('mixin update: ', v)
     }
   }
 }))

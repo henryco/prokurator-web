@@ -20,19 +20,18 @@
       })
 
       const token = response.headers['authorization']
-      localStorage.setItem('Authorization', token)
+      this.authorize(token)
 
       if (!token)
         throw `Cannot authorize ${response}`
 
-      this.$nextTick(() => loading.close());
-
+      loading.close()
       const lastPath = localStorage.getItem('router_cache')
       if (lastPath) {
         localStorage.removeItem('router_cache')
-        this.$router.push({name: lastPath})
+        window.location.href = lastPath
       } else {
-        this.$router.push({name: 'main'})
+        window.location.href = "/"
       }
     }
   })

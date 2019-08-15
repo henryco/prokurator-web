@@ -13,8 +13,7 @@
   }) export default class LoginButton extends Vue {
 
     protected onLogin (): void {
-      const r_name = this.$router.currentRoute.name
-      localStorage.setItem('router_cache', `${r_name}`)
+      localStorage.setItem('router_cache', window.location.href)
       window.location.href = "/login"
     }
   }

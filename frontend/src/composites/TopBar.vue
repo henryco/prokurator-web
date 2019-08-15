@@ -6,7 +6,7 @@
     </div>
 
     <template slot="right">
-      <login-button v-if="!isAuthorized()"/>
+      <login-button v-if="!authorization"/>
       <el-dropdown class="menu" trigger="click" @command="_onAccountMenuClick" v-else>
 
         <div class="account-box">
@@ -88,9 +88,16 @@
       }
     },
 
-    mounted(): void {
-      this.$nextTick(async () => this._fetchUserData())
+    watch: {
+      authorization: {
+        immediate: true,
+        handler: function (v) {
+          if (v === null || v === undefined) return;
+          this.$nextTick(async () => this._fetchUserData())
+        }
+      }
     }
+
   });
 </script>
 
