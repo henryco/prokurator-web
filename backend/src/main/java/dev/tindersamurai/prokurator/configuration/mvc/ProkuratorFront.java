@@ -1,4 +1,4 @@
-package dev.tindersamurai.prokurator.mvc.controller;
+package dev.tindersamurai.prokurator.configuration.mvc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j @Controller
 @RequestMapping("/")
-public class FrontController {
+public class ProkuratorFront {
 
 	@GetMapping
 	public String index() {

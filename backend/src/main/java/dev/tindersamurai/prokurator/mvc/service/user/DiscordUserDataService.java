@@ -2,6 +2,7 @@ package dev.tindersamurai.prokurator.mvc.service.user;
 
 import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository;
 import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository.GuildsResponse;
+import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository.UserResponse;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class DiscordUserDataService implements UserDataService {
 		log.debug("retrieveUserData: {}", userAccessToken);
 		try {
 			val r = userInfoRepository.getUserInfo(userAccessToken);
-			return new UserData(r.getId(), r.getUsername(), r.getDiscriminator(), r.getAvatar());
+			return mapUser(r);
 		} catch (Exception e) {
 			throw new TokenExpiredException(userAccessToken);
 		}
@@ -37,7 +38,7 @@ public class DiscordUserDataService implements UserDataService {
 		log.debug("retrieveUserData: {}, {}", userAccessToken, userId);
 		try {
 			val r = userInfoRepository.getUserInfo(userAccessToken, userId);
-			return new UserData(r.getId(), r.getUsername(), r.getDiscriminator(), r.getAvatar());
+			return mapUser(r);
 		} catch (Exception e) {
 			throw new TokenExpiredException(userAccessToken);
 		}
@@ -55,7 +56,14 @@ public class DiscordUserDataService implements UserDataService {
 		}
 	}
 
+
+	private static UserData mapUser(UserResponse r) {
+		val icon = "https://cdn.discordapp.com/avatars/" + r.getId() + "/" + r.getAvatar() + ".png";
+		return new UserData(r.getId(), r.getUsername(), r.getDiscriminator(), icon);
+	}
+
 	private static Guild mapGuild(GuildsResponse g) {
-		return new Guild(g.getId(), g.getName(), g.getIcon(), g.getOwner(), g.getPermissions());
+		val icon = "https://cdn.discordapp.com/icons/" + g.getId() + "/" + g.getIcon() + ".png";
+		return new Guild(g.getId(), g.getName(), icon, g.getOwner(), g.getPermissions());
 	}
 }

@@ -22,7 +22,7 @@ export default Vue.mixin(Vue.extend({
     api: () => (<Api> {
 
       // TODO MORE API
-      general: new Mock(),
+      general: new GeneralApi(),
 
     })
   }
