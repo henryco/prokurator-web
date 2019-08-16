@@ -14,6 +14,7 @@ export {ActivatorProps, Activator};
 declare interface LoadEvent {
   absolute?: number;
   pixels?: number;
+  next: Function;
 }
 export {LoadEvent}
 

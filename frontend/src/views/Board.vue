@@ -5,8 +5,10 @@
       board: {{c_boardId}}
     </div>
 
-    <prk-infinity-scroll @fetch="load">
-
+    <prk-infinity-scroll :next="false" @fetch="load">
+      <div v-for="i in d_count">
+        {{i}}
+      </div>
     </prk-infinity-scroll>
 
   </div>
@@ -14,12 +16,13 @@
 
 <script lang="ts">
   import {ElLoadingComponent} from "element-ui/types/loading";
-  import PrkInfinityScroll from "@/components/scroll"
+  import PrkInfinityScroll, {LoadEvent} from "@/components/scroll"
 
   import Vue from 'vue';
 
   declare interface Data {
     d_loading?: ElLoadingComponent,
+    d_count: number;
   }
 
   export default Vue.extend({
@@ -30,7 +33,8 @@
     },
 
     data: () => (<Data> {
-      d_loading: undefined
+      d_loading: undefined,
+      d_count: 0
     }),
 
     computed: {
@@ -40,12 +44,14 @@
     },
 
     methods: {
-      async load() {
-
+      load: async function (event: LoadEvent) {
+        this.d_count += 1;
         if (this.d_loading) {
           this.d_loading.close()
           this.d_loading = undefined
         }
+
+        event.next();
       }
     },
 

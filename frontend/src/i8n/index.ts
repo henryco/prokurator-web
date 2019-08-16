@@ -20,7 +20,7 @@ const I8NEng: I8NStrings = {
   account: "My Account",
   logout: "Logout",
   servers: "Servers",
-  prokurator: "Prokurator"
+  prokurator: "Lighthouse"
 }
 
 import Vue from "vue";

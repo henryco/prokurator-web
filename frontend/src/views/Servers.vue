@@ -67,7 +67,7 @@
       },
 
       load: async function () {
-        const api = await this.api().general;
+        const api = this.api().general;
         this.d_guilds = await api.getAvailableGuilds()
 
         if (this.d_loading) {
