@@ -20,10 +20,7 @@ export default Vue.mixin(Vue.extend({
 
   methods: <ApiMixin> {
     api: () => (<Api> {
-
-      // TODO MORE API
       general: new GeneralApi(),
-
     })
   }
 }));

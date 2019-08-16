@@ -22,8 +22,8 @@ export default Vue.mixin({
     const errorHandler = (error: AxiosError) => {
       const response = error.response
       if (error.code === '401' || (response && response.status === 401)) {
-        this.removeAuthorization()
-        window.location.href = "/"
+        this.removeAuthorization();
+        window.location.assign("/");
       }
       return Promise.reject({ ...error })
     }

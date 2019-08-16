@@ -11,8 +11,7 @@
       if (code === null || code === undefined)
         throw 'Cannot fetch login token code from uri param'
 
-      const loading = Loading.service({ fullscreen: true });
-
+      Loading.service({ fullscreen: true });
       data.set('discord_code', `${code}`)
       const response = await axios.post('/api/auth/login', data, {
         headers: {'Content-Type': 'multipart/form-data'},
@@ -25,13 +24,12 @@
       if (!token)
         throw `Cannot authorize ${response}`
 
-      loading.close()
       const lastPath = localStorage.getItem('router_cache')
       if (lastPath) {
         localStorage.removeItem('router_cache')
-        window.location.href = lastPath
+        window.location.assign(lastPath)
       } else {
-        window.location.href = "/"
+        window.location.assign("/")
       }
     }
   })

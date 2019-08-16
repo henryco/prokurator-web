@@ -9,12 +9,11 @@
   import Vue from "vue"
 
   @Component({
-    name: "LoginButton"
+    name: "composites.top.LoginButton"
   }) export default class LoginButton extends Vue {
 
     protected onLogin (): void {
-      localStorage.setItem('router_cache', window.location.href)
-      window.location.href = "/login"
+      this.$emit('login')
     }
   }
 </script>
