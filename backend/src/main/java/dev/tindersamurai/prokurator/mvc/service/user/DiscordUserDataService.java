@@ -58,12 +58,16 @@ public class DiscordUserDataService implements UserDataService {
 
 
 	private static UserData mapUser(UserResponse r) {
-		val icon = "https://cdn.discordapp.com/avatars/" + r.getId() + "/" + r.getAvatar() + ".png";
+		val icon = r.getAvatar() != null
+				? "https://cdn.discordapp.com/avatars/" + r.getId() + "/" + r.getAvatar() + ".png"
+				: null;
 		return new UserData(r.getId(), r.getUsername(), r.getDiscriminator(), icon);
 	}
 
 	private static Guild mapGuild(GuildsResponse g) {
-		val icon = "https://cdn.discordapp.com/icons/" + g.getId() + "/" + g.getIcon() + ".png";
+		val icon = g.getIcon() != null
+				? "https://cdn.discordapp.com/icons/" + g.getId() + "/" + g.getIcon() + ".png"
+				: null;
 		return new Guild(g.getId(), g.getName(), icon, g.getOwner(), g.getPermissions());
 	}
 }

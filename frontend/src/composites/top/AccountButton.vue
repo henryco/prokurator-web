@@ -1,7 +1,8 @@
 <template>
   <el-dropdown class="account-button" trigger="click" @command="_onAccountMenuClick" v-else>
     <div class="account-box">
-      <el-avatar fit="cover" :src="d_usericon"></el-avatar>
+      <el-avatar fit="cover" :src="d_usericon" v-if="d_usericon && d_usericon !== 'null'"></el-avatar>
+      <el-avatar fit="cover" icon="el-icon-user" v-else></el-avatar>
       <span class="fonted acc-name">{{d_username}}</span>
     </div>
     <el-dropdown-menu slot="dropdown">
@@ -16,8 +17,8 @@
   import Vue from 'vue';
 
   interface Data {
-    d_username?: string;
-    d_usericon?: string;
+    d_username?: string | null;
+    d_usericon?: string | null;
   }
 
   export default Vue.extend({

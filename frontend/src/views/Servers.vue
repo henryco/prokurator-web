@@ -1,12 +1,13 @@
 <template>
   <div class="servers-view">
-    <prk-infinity-scroll @fetch="load" class="content-container">
+    <prk-infinity-scroll @fetch="load" retry="0" class="content-container">
       <h1 class="title">{{strings.selectServer}}</h1>
       <div class="cards">
         <div @click="openCard(g)" v-for="g in d_guilds" :key="g.id" class="cardo">
           <el-card shadow="hover" class="hover-card">
             <div class="server-box">
-              <el-avatar class="avatar" fit="cover" :src="g.icon"/>
+              <el-avatar class="avatar" fit="cover" :src="g.icon" v-if="g.icon && g.icon !== 'null'"/>
+              <el-avatar class="avatar" fit="cover" v-else><b>{{_textIcon(g.name)}}</b></el-avatar>
               <span class="server-name">{{g.name}}</span>
             </div>
           </el-card>
@@ -73,6 +74,11 @@
           this.d_loading.close()
           this.d_loading = undefined
         }
+      },
+
+      _textIcon: function (text?: string | null): string {
+        if (!text) return '';
+        return text.charAt(0);
       }
     },
 

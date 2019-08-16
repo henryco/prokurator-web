@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="top-navigation">
-      <top-bar class="bar" :authorized="d_authorized" />
+      <top-bar class="bar" :authorized="isAuthorized()" />
     </div>
     <div class="router-box">
       <router-view/>
@@ -16,31 +16,10 @@
   import TopBar from "@/composites/top/TopBar.vue";
   import Vue from 'vue'
 
-  interface AppData {
-    d_authorized: boolean
-  }
-
 	export default Vue.extend({
 		name: 'app',
-
-    mixins: [
-      LoaderMixin,
-      ApiMixin,
-      I8NMixin
-    ],
-
-    components: {
-      TopBar
-    },
-
-    data: () => (<AppData> {
-      d_authorized: false
-    }),
-
-    mounted(): void {
-		  console.log('CREATED APP')
-		  this.d_authorized = this.isAuthorized()
-    }
+    mixins: [LoaderMixin, ApiMixin, I8NMixin],
+    components: {TopBar}
   })
 </script>
 
