@@ -6,8 +6,8 @@
     </div>
 
     <prk-infinity-scroll :next="false" @fetch="load">
-      <div v-for="i in d_count">
-        {{i}}
+      <div v-for="item of d_items" :key="item.id">
+
       </div>
     </prk-infinity-scroll>
 
@@ -15,14 +15,17 @@
 </template>
 
 <script lang="ts">
-  import {ElLoadingComponent} from "element-ui/types/loading";
+  import {Probe, Page, Content, Details, Channel} from "@/api/media/PrkMediaApi";
   import PrkInfinityScroll, {LoadEvent} from "@/components/scroll"
+  import {ElLoadingComponent} from "element-ui/types/loading";
 
   import Vue from 'vue';
 
+  const SIZE: number = 20;
   declare interface Data {
     d_loading?: ElLoadingComponent,
-    d_count: number;
+    d_items: Content[];
+    d_page: number;
   }
 
   export default Vue.extend({
@@ -34,7 +37,8 @@
 
     data: () => (<Data> {
       d_loading: undefined,
-      d_count: 0
+      d_items: [],
+      d_page: 0
     }),
 
     computed: {
@@ -45,7 +49,16 @@
 
     methods: {
       load: async function (event: LoadEvent) {
-        this.d_count += 1;
+
+        // noinspection UnnecessaryLocalVariableJS
+        const content = await this.api().media.fetchMediaContent({
+          page: {
+            page: this.d_page++,
+            size: SIZE
+          }
+        })
+        this.d_items = content;
+
         if (this.d_loading) {
           this.d_loading.close()
           this.d_loading = undefined
