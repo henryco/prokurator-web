@@ -1,21 +1,33 @@
 <template>
   <div class="board-view">
-
-    <div class="top">
-      board: {{c_boardId}}
+    <div class="banner">
+      <!--TODO-->
     </div>
 
-    <prk-infinity-scroll :next="false" @fetch="load">
-      <div v-for="item of d_items" :key="item.id">
-
+    <div class="board">
+      <div class="top">
+        <el-input placeholder="Please input" class="input-with-select">
+          <el-button slot="append" icon="el-icon-search" @click="buttonEvent"/>
+        </el-input>
       </div>
-    </prk-infinity-scroll>
 
+      <prk-infinity-scroll :next="false" @fetch="scrollEvent">
+        <div v-for="item of d_items" :key="item.id">
+          {{item}}
+        </div>
+      </prk-infinity-scroll>
+    </div>
+
+    <div class="banner">
+      <!--TODO-->
+    </div>
   </div>
+
+
 </template>
 
 <script lang="ts">
-  import {Probe, Page, Content, Details, Channel} from "@/api/media/PrkMediaApi";
+  import {Probe, Query, Page, Content, Details, Channel} from "@/api/media/PrkMediaApi";
   import PrkInfinityScroll, {LoadEvent} from "@/components/scroll"
   import {ElLoadingComponent} from "element-ui/types/loading";
 
@@ -25,6 +37,7 @@
   declare interface Data {
     d_loading?: ElLoadingComponent,
     d_items: Content[];
+    d_query?: Query;
     d_page: number;
   }
 
@@ -37,8 +50,9 @@
 
     data: () => (<Data> {
       d_loading: undefined,
-      d_items: [],
-      d_page: 0
+      d_query: undefined,
+      d_page: 0,
+      d_items: []
     }),
 
     computed: {
@@ -48,30 +62,45 @@
     },
 
     methods: {
-      load: async function (event: LoadEvent) {
-
+      load: async function (): Promise<Content[]> {
         // noinspection UnnecessaryLocalVariableJS
         const content = await this.api().media.fetchMediaContent({
+          query: this.d_query,
           page: {
             page: this.d_page++,
             size: SIZE
           }
         })
-        this.d_items = content;
 
         if (this.d_loading) {
           this.d_loading.close()
           this.d_loading = undefined
         }
 
-        event.next();
+        this.d_items = content;
+        return content;
+      },
+
+      buttonEvent: async function () {
+        this.startLoader();
+        await this.load();
+      },
+
+      scrollEvent: async function (event: LoadEvent) {
+        const content = await this.load();
+        if (content.length === SIZE)
+          event.next();
+      },
+
+      startLoader: function () {
+        this.d_loading = this.loadingService({
+          fullscreen: true
+        })
       }
     },
 
     mounted(): void {
-      this.d_loading = this.loadingService({
-        fullscreen: true
-      })
+      this.startLoader();
     }
   });
 </script>
@@ -80,6 +109,32 @@
   .board-view {
     position: relative;
     width: 100%;
-    height: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow-x: hidden;
+
+    .banner {
+      width: 100%;
+      max-width: 250px;
+    }
+
+    .board {
+      width: 100%;
+      min-width: 720px;
+
+      .top {
+        margin-top: 5%;
+        margin-bottom: 2.5%;
+      }
+    }
+
   }
+
+  /*.el-select .el-input {*/
+  /*  width: 110px;*/
+  /*}*/
+  /*.input-with-select .el-input-group__prepend {*/
+  /*  background-color: #fff;*/
+  /*}*/
+
 </style>

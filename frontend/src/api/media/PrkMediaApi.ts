@@ -3,13 +3,17 @@ declare interface Page {
   size: number;
 }
 
-declare interface Probe {
+declare interface Query {
   category?: string[];
   channel?: string[];
   user?: string[];
   before?: number;
   after?: number;
   nsfw?: boolean;
+}
+
+declare interface Probe {
+  query?: Query;
   page: Page;
 }
 
@@ -43,7 +47,7 @@ declare interface Content {
   channel: Channel;
 }
 
-export {Probe, Page, Content, Details, Channel};
+export {Probe, Query, Page, Content, Details, Channel};
 
 export default interface PrkMediaApi {
 

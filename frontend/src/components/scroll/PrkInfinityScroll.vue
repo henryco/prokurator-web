@@ -40,7 +40,7 @@
 
       retry: {
         type:  [Number, String],
-        default: 2,
+        default: 1,
         validator: (v: any): boolean =>
           v === INFINITY || !Number.isNaN(Number(v))
       }
