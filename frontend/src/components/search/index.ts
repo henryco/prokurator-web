@@ -4,13 +4,19 @@ declare interface Context {
 }
 
 declare interface Filter {
-  value: string | number;
+  value: any;
   type: Context;
+  name?: string;
 }
 
 declare interface Query {
   filters: Context[]
   raw: string;
+}
+
+export const DATE: Context = {
+  value: '<$%=date=%$>',
+  name: '<$%=date=%$>'
 }
 
 declare type Fetch = (context: string, query: string) => Promise<Context[]>;

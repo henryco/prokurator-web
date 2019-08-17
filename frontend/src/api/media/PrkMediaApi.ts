@@ -6,6 +6,7 @@ declare interface Page {
 declare interface Query {
   category?: string[];
   channel?: string[];
+  deleted?: boolean;
   user?: string[];
   before?: number;
   after?: number;

@@ -20,7 +20,7 @@
           type="info"
           closable
         >
-         {{f.type.name}}: <b>{{f.value}}</b>
+         {{f.type.name}}: <b>{{ f.name === undefined ? f.value : f.name}}</b>
         </el-tag>
       </template>
       <el-tag
@@ -34,22 +34,33 @@
       >
         {{d_context.value}}
       </el-tag>
+      <prk-hidden-date
+        @date="dateSelect"
+        ref="datepicker"
+        v-if="d_date"
+      />
     </template>
   </el-autocomplete>
 </template>
 
 <script lang="ts">
-  import {Context, Filter, Fetch, Query} from "./";
+  import PrkHiddenDate from "@/components/search/PrkHiddenDate.vue";
+  import {Context, Filter, Fetch, Query, DATE} from "./";
   import Vue from 'vue';
 
   declare interface State {
     d_context?: Context;
     d_filters: Filter[];
     d_state: string;
+    d_date: boolean;
   }
 
   export default Vue.extend({
     name: "PrkSearchInput",
+
+    components: {
+      PrkHiddenDate
+    },
 
     props: {
       /**@type {string[]}*/
@@ -62,6 +73,7 @@
     data: () => (<State> {
       d_context: undefined,
       d_filters: [],
+      d_date: false,
       d_state: ''
     }),
 
@@ -75,6 +87,10 @@
             return;
           }
         }
+      },
+      d_context: function (v?: Context) {
+        if (v === undefined)
+          this.d_date = false;
       }
     },
 
@@ -91,6 +107,7 @@
 
       suggestions: async function (query: string, cb: Function) {
         if (!this.d_context) {
+          this.d_date = false;
           cb(this.context.filter((s: any) => s.includes(query))
             .map((v: unknown) => this.createContext(v))
           )
@@ -98,7 +115,15 @@
         }
 
         if (this.fetch) {
-          cb(await this.fetch(this.d_context.name, query));
+          const context = await this.fetch(this.d_context.name, query)
+          if (context.length === 1 && context[0] === DATE) {
+            this.d_date = true
+            this.startDateFocusQueue();
+            cb([]);
+            return;
+          }
+          this.d_date = false;
+          cb(context);
         }
       },
 
@@ -128,6 +153,33 @@
           value: item.value,
           type: context
         });
+      },
+
+      dateSelect: function (date: number): void {
+        if (!this.d_date || !this.d_context) return;
+        const context = this.d_context
+        this.d_context = undefined;
+        this.d_filters.push(<Filter> {
+          name: new Date(date).toLocaleDateString(),
+          type: context,
+          value: date
+        })
+      },
+
+      startDateFocusQueue: function (): void {
+        if (!this.d_date) return;
+
+        const date = (<any>this.$refs.datepicker)
+        if (date !== undefined) {
+          date.focus()
+          return;
+        }
+
+        setTimeout(() => {
+          this.$nextTick(() => {
+            this.startDateFocusQueue();
+          })
+        }, 20)
       }
 
     }

@@ -1,13 +1,10 @@
 <template>
-  <prk-search-input
-    :context="c_context"
-    :fetch="fetch"
-    @search="search"
-  />
+  <prk-search-input :context="c_context" :fetch="fetch" @search="search"/>
 </template>
 
 <script lang="ts">
-  import PrkSearchInput, {Context, Query} from "@/components/search";
+  import PrkSearchInput, {Context, Query, DATE} from "@/components/search";
+  import {Query as ApiQuery} from "@/api/media/PrkMediaApi";
 
   import Vue from 'vue';
 
@@ -20,13 +17,23 @@
 
     computed: {
       c_context: function () {
-        return ['deleted', 'nsfw', 'author', 'channel']
+        return [
+          'category',
+          'channel',
+          'user',
+          'before',
+          'after',
+          'nsfw'
+        ] // deleted also
       }
     },
 
     methods: {
       search: function (query: Query) {
-        this.$emit('search', query);
+        console.dir(query)
+        this.$emit('search', <ApiQuery> {
+        //  TODO: MAP
+        });
       },
 
       fetch: async function (context: string, query: string): Promise<Context[]> {
@@ -34,6 +41,11 @@
           {value: 'true', name: 'true'},
           {value: 'false', name: 'false'}
         ]
+
+        if (context === 'before' || context === 'after') {
+          return [DATE]
+        }
+
         return []
       }
     }

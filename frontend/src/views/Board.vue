@@ -3,9 +3,7 @@
     <div class="banner"><!--TODO--></div>
 
     <div class="board">
-
       <board-search class="top" @search="search"/>
-
       <prk-infinity-scroll :next="false" @fetch="scrollEvent">
         <div v-for="item of d_items" :key="item.id">
           {{item}}
@@ -75,7 +73,8 @@
         return content;
       },
 
-      search: async function () {
+      search: async function (query?: Query) {
+        this.d_query = query;
         this.startLoader();
         await this.load();
       },
@@ -123,12 +122,4 @@
     }
 
   }
-
-  /*.el-select .el-input {*/
-  /*  width: 110px;*/
-  /*}*/
-  /*.input-with-select .el-input-group__prepend {*/
-  /*  background-color: #fff;*/
-  /*}*/
-
 </style>
