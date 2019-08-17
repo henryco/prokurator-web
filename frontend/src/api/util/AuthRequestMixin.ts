@@ -1,5 +1,5 @@
 import authorization from "./AuthorizationMixin";
-import axios from 'axios'
+import axios, {AxiosError} from 'axios'
 import Vue from 'vue';
 
 export default Vue.mixin({
@@ -17,6 +17,20 @@ export default Vue.mixin({
         return config
       },
       (error) => Promise.reject(error)
+    )
+
+    const errorHandler = (error: AxiosError) => {
+      const response = error.response
+      if (error.code === '401' || (response && response.status === 401)) {
+        this.removeAuthorization();
+        window.location.assign("/");
+      }
+      return Promise.reject({ ...error })
+    }
+
+    axios.interceptors.response.use(
+      v => v,
+      error => errorHandler(error)
     )
   }
 })

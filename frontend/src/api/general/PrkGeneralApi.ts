@@ -1,6 +1,6 @@
 interface IdEntity {
-  icon?: string;
-  name: string;
+  icon?: string | null;
+  name?: string | null;
   id: string;
 }
 
@@ -9,7 +9,6 @@ interface GuildForm extends IdEntity {
 }
 
 interface UserForm extends IdEntity {
-  permissions: string[];
 }
 
 export {IdEntity, GuildForm, UserForm};
@@ -21,6 +20,6 @@ export default interface PrkGeneralApi {
   getUserInfo(): Promise<UserForm>;
 }
 
+import GeneralApi from "./GeneralApi"
 import Mock from "./MockGeneralApi";
-export {Mock, Mock as GeneralApi};
-
+export {Mock, GeneralApi};

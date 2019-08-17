@@ -5,6 +5,7 @@ import dev.tindersamurai.prokurator.backend.commons.client.ClientFactory;
 import dev.tindersamurai.prokurator.backend.commons.service.ICollectorService;
 import dev.tindersamurai.prokurator.backend.commons.service.IConfigurationService;
 import dev.tindersamurai.prokurator.backend.commons.service.IFileStorageService;
+import dev.tindersamurai.prokurator.backend.commons.service.IGuildService;
 import dev.tindersamurai.prokurator.configuration.props.properties.ProkuratorProperties;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -41,5 +42,11 @@ public class CoreBackendBeans {
 	public ICollectorService provideCollectorServiceClient(RSCProps p) {
 		log.debug("provideCollectorServiceClient: {}", p);
 		return ClientFactory.createCollectorClient(p.getUrl(), p.getMapper());
+	}
+
+	@Bean
+	public IGuildService provideGuildServiceClient(RSCProps p) {
+		log.debug("provideGuildServiceClient: {}", p);
+		return ClientFactory.createGuildService(p.getUrl(), p.getMapper());
 	}
 }

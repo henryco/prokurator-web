@@ -3,6 +3,7 @@ declare interface I8NStrings {
   account: string;
   servers: string;
   logout: string;
+  prokurator: string;
 }
 
 declare interface I8NMixin {
@@ -18,7 +19,8 @@ const I8NEng: I8NStrings = {
   selectServer: 'Select a server',
   account: "My Account",
   logout: "Logout",
-  servers: "Servers"
+  servers: "Servers",
+  prokurator: "Lighthouse"
 }
 
 import Vue from "vue";

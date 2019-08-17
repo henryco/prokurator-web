@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="top-navigation">
-      <top-bar class="bar"/>
+      <top-bar class="bar" :authorized="isAuthorized()" />
     </div>
     <div class="router-box">
       <router-view/>
@@ -13,16 +13,14 @@
   import LoaderMixin from "@/utils/LoaderMixin";
   import I8NMixin from "@/i8n"
   import ApiMixin from '@/api'
-  import TopBar from "@/composites/TopBar.vue";
+  import TopBar from "@/composites/top/TopBar.vue";
   import Vue from 'vue'
 
 	export default Vue.extend({
 		name: 'app',
     mixins: [LoaderMixin, ApiMixin, I8NMixin],
-    components: {
-		  TopBar
-    }
-	})
+    components: {TopBar}
+  })
 </script>
 
 <style lang="scss">

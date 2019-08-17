@@ -34,8 +34,7 @@ export default class MockGeneralApi implements GeneralApi {
     return <UserForm> {
       name: 'Dangerous Boy',
       id: '2334534534',
-      icon: 'https://cdn.discordapp.com/avatars/230748644117184513/3f8faf5a34ef03d7672d4840fa2687ad.png',
-      permissions: []
+      icon: 'https://cdn.discordapp.com/avatars/230748644117184513/3f8faf5a34ef03d7672d4840fa2687ad.png'
     };
   }
 
