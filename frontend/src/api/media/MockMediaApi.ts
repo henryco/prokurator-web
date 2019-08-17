@@ -9,6 +9,7 @@ export default class MockMediaApi implements PrkMediaApi {
       {
         id: "123",
         date: 0,
+        deleted: false,
         author: {
           id: "12345",
           name: "Someone",

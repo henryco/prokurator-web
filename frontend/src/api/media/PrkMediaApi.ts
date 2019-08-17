@@ -45,6 +45,7 @@ declare interface Content {
   media: Media;
   author: Details;
   channel: Channel;
+  deleted: boolean;
 }
 
 export {Probe, Query, Page, Content, Details, Channel};

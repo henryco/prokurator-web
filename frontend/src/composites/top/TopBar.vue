@@ -24,7 +24,7 @@
 <script lang="ts">
   import AccountButton from "@/composites/top/AccountButton.vue";
   import LoginButton from '@/composites/top/LoginButton.vue'
-  import PrkTopBar from "@/components/PrkTopBar.vue";
+  import PrkTopBar from "@/components/top/PrkTopBar.vue";
   import Vue from 'vue';
 
   export default Vue.extend({

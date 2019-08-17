@@ -1,15 +1,10 @@
 <template>
   <div class="board-view">
-    <div class="banner">
-      <!--TODO-->
-    </div>
+    <div class="banner"><!--TODO--></div>
 
     <div class="board">
-      <div class="top">
-        <el-input placeholder="Please input" class="input-with-select">
-          <el-button slot="append" icon="el-icon-search" @click="buttonEvent"/>
-        </el-input>
-      </div>
+
+      <board-search class="top" @search="search"/>
 
       <prk-infinity-scroll :next="false" @fetch="scrollEvent">
         <div v-for="item of d_items" :key="item.id">
@@ -18,9 +13,7 @@
       </prk-infinity-scroll>
     </div>
 
-    <div class="banner">
-      <!--TODO-->
-    </div>
+    <div class="banner"><!--TODO--></div>
   </div>
 
 
@@ -29,8 +22,8 @@
 <script lang="ts">
   import {Probe, Query, Page, Content, Details, Channel} from "@/api/media/PrkMediaApi";
   import PrkInfinityScroll, {LoadEvent} from "@/components/scroll"
+  import BoardSearch from "@/composites/search/BoardSearch.vue";
   import {ElLoadingComponent} from "element-ui/types/loading";
-
   import Vue from 'vue';
 
   const SIZE: number = 20;
@@ -45,7 +38,8 @@
     name: "Board",
 
     components: {
-      PrkInfinityScroll
+      PrkInfinityScroll,
+      BoardSearch
     },
 
     data: () => (<Data> {
@@ -81,7 +75,7 @@
         return content;
       },
 
-      buttonEvent: async function () {
+      search: async function () {
         this.startLoader();
         await this.load();
       },
