@@ -1,4 +1,4 @@
-import PrkMediaApi, {Probe, Page, Content, Details, Channel} from "./PrkMediaApi";
+import PrkMediaApi, {Probe, Page, Content, Details, Channel} from "./";
 
 export default class MockMediaApi implements PrkMediaApi {
 

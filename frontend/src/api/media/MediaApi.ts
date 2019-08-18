@@ -1,4 +1,4 @@
-import PrkMediaApi, {Content, Probe} from "./PrkMediaApi";
+import PrkMediaApi, {Content, Probe} from ".";
 import axios from "axios";
 
 export default class MediaApi implements PrkMediaApi {

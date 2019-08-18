@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-  import {Probe, Query, Page, Content, Details, Channel} from "@/api/media/PrkMediaApi";
+  import {Probe, Query, Page, Content, Details, Channel} from "@/api/media";
   import PrkInfinityScroll, {LoadEvent} from "@/components/scroll"
   import BoardSearch from "@/composites/search/BoardSearch.vue";
   import {ElLoadingComponent} from "element-ui/types/loading";

@@ -1,12 +1,12 @@
 import PrkGeneralApi, {Mock as MockGeneralApi, GeneralApi} from "./general/PrkGeneralApi";
-import PrkMediaApi, {Mock as MockMediaApi, MediaApi} from "./media/PrkMediaApi"
+import Index, {Mock as MockMediaApi, MediaApi} from "./media"
 
 import AuthRequestMixin from "@/api/util/AuthRequestMixin";
 import Vue from 'vue';
 
 declare interface Api {
   general: PrkGeneralApi;
-  media: PrkMediaApi;
+  media: Index;
 }
 
 declare interface ApiMixin {

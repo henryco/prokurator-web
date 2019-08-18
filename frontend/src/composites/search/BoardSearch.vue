@@ -4,7 +4,7 @@
 
 <script lang="ts">
   import PrkSearchInput, {Context, Result, Query, DATE} from "@/components/search";
-  import {Query as ApiQuery} from "@/api/media/PrkMediaApi";
+  import {Query as ApiQuery} from "@/api/media";
 
   type FetchFunction = (context: string, query: string) => Promise<Record<string, string>>;
 
