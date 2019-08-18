@@ -1,6 +1,7 @@
 declare interface Context {
   value: string;
   name: string;
+  label?: string;
 }
 
 declare interface Filter {

@@ -3,7 +3,12 @@
     <div class="banner"><!--TODO--></div>
 
     <div class="board">
-      <board-search class="top" @search="search"/>
+      <board-search
+        @search="search"
+        :fetch="filter"
+        class="top"
+        admin
+      />
       <prk-infinity-scroll :next="false" @fetch="scrollEvent">
         <div v-for="item of d_items" :key="item.id">
           {{item}}
@@ -71,6 +76,19 @@
 
         this.d_items = content;
         return content;
+      },
+
+      filter: async function (c: string, s: string): Promise<Record<string, string>> {
+        if (c === 'category') {
+          return {'abc': '123', 'cde': 'wow', 'same': 'same'}
+        }
+        if (c === 'channel') {
+          return {}
+        }
+        if (c === 'user') {
+          return {}
+        }
+        return {}
       },
 
       search: async function (query?: Query) {

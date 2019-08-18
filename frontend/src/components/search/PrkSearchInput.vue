@@ -9,6 +9,8 @@
   >
     <el-button slot="append" icon="el-icon-search" @click="search"/>
 
+    <template slot-scope="{ item }">{{ item.label ? item.label : item.value }}</template>
+
     <template slot="prepend">
       <template v-for="f in d_filters">
         <el-tag
