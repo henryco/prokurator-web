@@ -1,12 +1,14 @@
 import PrkGeneralApi, {Mock as MockGeneralApi, GeneralApi} from "./general/PrkGeneralApi";
-import Index, {Mock as MockMediaApi, MediaApi} from "./media"
+import PrkMediaApi, {Mock as MockMediaApi, MediaApi} from "./media";
+import PrkGuildApi, {MockGuildApi, GuildApiImp} from "@/api/guild";
 
 import AuthRequestMixin from "@/api/util/AuthRequestMixin";
 import Vue from 'vue';
 
 declare interface Api {
   general: PrkGeneralApi;
-  media: Index;
+  guild: PrkGuildApi;
+  media: PrkMediaApi;
 }
 
 declare interface ApiMixin {
@@ -24,7 +26,8 @@ export default Vue.mixin(Vue.extend({
   methods: <ApiMixin> {
     api: () => (<Api> {
       general: new GeneralApi(),
-      media: new MockMediaApi()
+      media: new MockMediaApi(),
+      guild: new MockGuildApi()
     })
   }
 }));
