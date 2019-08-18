@@ -57,7 +57,7 @@
 
     computed: {
       c_context: function () {
-        let arr = ['category', 'channel', 'author', 'before', 'after', 'nsfw']
+        let arr = ['category', 'channel', 'author', 'before', 'after', 'nsfw', 'file']
         if (this.admin) arr.push('deleted');
         return arr;
       }
@@ -74,6 +74,7 @@
           before: _date('before', filters),
           after: _date('after', filters),
           nsfw: _filter('nsfw', filters),
+          file: _filter('file', filters),
           raw: query.raw
         });
       },
@@ -86,7 +87,8 @@
           "author": this._user,
           "before": this._date,
           "after": this._date,
-          "nsfw": this._bool
+          "nsfw": this._bool,
+          "file": this._file
         })[`${context}`](query)
       },
 
@@ -102,6 +104,11 @@
 
       _user: async function (query: string): Promise<Context[]> {
         const r: Record<string, string> = await this.fetch('user', query);
+        return _map(r);
+      },
+
+      _file: async function (query: string): Promise<Context[]> {
+        const r: Record<string, string> = await this.fetch('file', query);
         return _map(r);
       },
 

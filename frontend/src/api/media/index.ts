@@ -8,6 +8,7 @@ declare interface Query {
   channel?: string[];
   deleted?: boolean[];
   nsfw?: boolean[];
+  file?: string[];
   user?: string[];
   before?: number;
   after?: number;
@@ -54,7 +55,7 @@ export {Probe, Query, Page, Content, Details, Channel};
 
 export default interface PrkMediaApi {
 
-  fetchMediaContent(probe: Probe): Promise<Content[]>;
+  fetchMediaContent(probe: Probe, guild: string): Promise<Content[]>;
 }
 
 import MediaApi from "./MediaApi";

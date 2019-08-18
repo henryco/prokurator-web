@@ -90,6 +90,9 @@
       c_name: function () {
         if (!this.d_guild) return;
         return this.d_guild.name;
+      },
+      c_id: function () {
+        return this.$route.params.id;
       }
     },
 
@@ -102,7 +105,7 @@
             page: this.d_page++,
             size: SIZE
           }
-        })
+        }, this.c_id)
 
         if (this.d_loading) {
           this.d_loading.close()
@@ -121,6 +124,9 @@
           return {}
         }
         if (c === 'user') {
+          return {}
+        }
+        if (c === 'file') {
           return {}
         }
         return {}
