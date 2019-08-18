@@ -6,11 +6,12 @@ declare interface Page {
 declare interface Query {
   category?: string[];
   channel?: string[];
-  deleted?: boolean;
+  deleted?: boolean[];
+  nsfw?: boolean[];
   user?: string[];
   before?: number;
   after?: number;
-  nsfw?: boolean;
+  raw?: string;
 }
 
 declare interface Probe {

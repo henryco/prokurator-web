@@ -9,8 +9,12 @@ declare interface Filter {
   name?: string;
 }
 
+declare interface Result
+  extends Context {
+}
+
 declare interface Query {
-  filters: Context[]
+  filters: Result[]
   raw: string;
 }
 
@@ -21,7 +25,7 @@ export const DATE: Context = {
 
 declare type Fetch = (context: string, query: string) => Promise<Context[]>;
 
-export {Context, Filter, Fetch, Query};
+export {Context, Filter, Fetch, Query, Result};
 
 import PrkSearchInput from "@/components/search/PrkSearchInput.vue";
 export default PrkSearchInput;
