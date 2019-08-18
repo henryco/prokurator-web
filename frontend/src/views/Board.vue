@@ -1,11 +1,16 @@
 <template>
   <div class="board-view">
 
-    <div class="info">
+    <div class="info" v-if="c_icon">
       <div class="avatar">
         <img :src="c_icon" alt="" class="avatar-icon"/>
       </div>
-      <!-- TODO -->
+      <div class="banner-left">
+        <!--TODO-->
+      </div>
+    </div>
+    <div class="banner-left" v-else>
+      <!--TODO-->
     </div>
 
     <div class="board">
@@ -80,7 +85,7 @@
       },
       c_icon: function () {
         if (!this.d_guild) return;
-        return `${this.d_guild.icon}?size=512`;
+        return this.d_guild.icon;
       },
       c_name: function () {
         if (!this.d_guild) return;
@@ -164,12 +169,17 @@
 
     .fonted {
       font-family: "Helvetica Neue", Helvetica, "DejaVu Sans Light", Arial, sans-serif;
-      color: #606266;
+      color: #909399;
     }
 
     .banner {
       width: 100%;
       max-width: 100px;
+    }
+
+    .banner-left {
+      width: 100%;
+      max-width: 200px;
     }
 
     .info {
@@ -193,6 +203,7 @@
           height: auto !important;
           border-radius: 8% 26%;
           overflow: hidden;
+          opacity: 0.8;
         }
       }
     }

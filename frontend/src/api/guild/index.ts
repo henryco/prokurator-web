@@ -1,7 +1,7 @@
 declare interface GuildFormData {
   id: string;
   name: string;
-  icon: string;
+  icon?: string;
   admin: boolean;
 }
 

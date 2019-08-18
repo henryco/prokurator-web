@@ -66,7 +66,7 @@ public class DiscordUserDataService implements UserDataService {
 
 	private static Guild mapGuild(GuildsResponse g) {
 		val icon = g.getIcon() != null
-				? "https://cdn.discordapp.com/icons/" + g.getId() + "/" + g.getIcon() + ".png"
+				? "https://cdn.discordapp.com/icons/" + g.getId() + "/" + g.getIcon() + ".png?size=512"
 				: null;
 		return new Guild(g.getId(), g.getName(), icon, g.getOwner(), g.getPermissions());
 	}
