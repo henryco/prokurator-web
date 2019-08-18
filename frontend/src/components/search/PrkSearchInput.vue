@@ -9,6 +9,8 @@
   >
     <el-button slot="append" icon="el-icon-search" @click="search"/>
 
+    <template slot-scope="{ item }">{{ item.label ? item.label : item.value }}</template>
+
     <template slot="prepend">
       <template v-for="f in d_filters">
         <el-tag
@@ -45,7 +47,7 @@
 
 <script lang="ts">
   import PrkHiddenDate from "@/components/search/PrkHiddenDate.vue";
-  import {Context, Filter, Fetch, Query, DATE} from "./";
+  import {Context, Filter, Fetch, Query, Result, DATE} from "./";
   import Vue from 'vue';
 
   declare interface State {
@@ -96,9 +98,10 @@
 
     methods: {
       search: function () {
+        this.d_context = undefined;
         this.$emit('search', <Query> {
           raw: this.d_state,
-          filters: this.d_filters.map((f: Filter) => (<Context> {
+          filters: this.d_filters.map((f: Filter) => (<Result> {
             name: f.type.name,
             value: f.value
           }))
@@ -159,6 +162,7 @@
         if (!this.d_date || !this.d_context) return;
         const context = this.d_context
         this.d_context = undefined;
+        this.d_state = '';
         this.d_filters.push(<Filter> {
           name: new Date(date).toLocaleDateString(),
           type: context,

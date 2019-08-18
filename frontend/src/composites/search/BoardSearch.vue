@@ -1,12 +1,45 @@
 <template>
-  <prk-search-input :context="c_context" :fetch="fetch" @search="search"/>
+  <prk-search-input :context="c_context" :fetch="_fetch" @search="search"/>
 </template>
 
 <script lang="ts">
-  import PrkSearchInput, {Context, Query, DATE} from "@/components/search";
-  import {Query as ApiQuery} from "@/api/media/PrkMediaApi";
+  import PrkSearchInput, {Context, Result, Query, DATE} from "@/components/search";
+  import {Query as ApiQuery} from "@/api/media";
+
+  type FetchFunction = (context: string, query: string) => Promise<Record<string, string>>;
 
   import Vue from 'vue';
+
+  async function _map(r?: Record<string, string>): Promise<Context[]> {
+    let results: Context[] = [];
+    if (r) {
+      for (let k in r) {
+        if (r.hasOwnProperty(k)) {
+          const id = k;
+          const v = r[k];
+          const e = id === v ? '' : `(${id})`;
+          results.push({
+            label: `${v} ${e}`,
+            value: k,
+            name: k
+          });
+        }
+      }
+    }
+    return results;
+  }
+
+  function _filter (s: string, m: Result[]): string[] | undefined {
+    const r = m.filter(m => m.name === s).map(r => r.value)
+    if (r.length === 0) return;
+    return [...new Set(r)];
+  }
+
+  function _date(s: string, m: Result[]): number | undefined {
+    const r = _filter(s, m)
+    if (r === undefined) return;
+    return Number(r[0])
+  }
 
   export default Vue.extend({
     name: "BoardSearch",
@@ -15,38 +48,82 @@
       PrkSearchInput
     },
 
+    props: {
+      /**@type {FetchFunction}*/
+      fetch: Function,
+
+      admin: [Boolean],
+    },
+
     computed: {
       c_context: function () {
-        return [
-          'category',
-          'channel',
-          'user',
-          'before',
-          'after',
-          'nsfw'
-        ] // deleted also
+        let arr = ['category', 'channel', 'author', 'before', 'after', 'nsfw', 'file']
+        if (this.admin) arr.push('deleted');
+        return arr;
       }
     },
 
     methods: {
       search: function (query: Query) {
-        console.dir(query)
+        const filters = query.filters
         this.$emit('search', <ApiQuery> {
-        //  TODO: MAP
+          category: _filter('category', filters),
+          deleted: _filter('deleted', filters),
+          channel: _filter('channel', filters),
+          user: _filter('author', filters),
+          before: _date('before', filters),
+          after: _date('after', filters),
+          nsfw: _filter('nsfw', filters),
+          file: _filter('file', filters),
+          raw: query.raw
         });
       },
 
-      fetch: async function (context: string, query: string): Promise<Context[]> {
-        if (context === 'nsfw') return [
-          {value: 'true', name: 'true'},
-          {value: 'false', name: 'false'}
-        ]
+      _fetch: async function (context: string, query: string): Promise<Context[]> {
+        return (<Record<string, Function>>{
+          "category": this._category,
+          "channel": this._channel,
+          "deleted": this._bool,
+          "author": this._user,
+          "before": this._date,
+          "after": this._date,
+          "nsfw": this._bool,
+          "file": this._file
+        })[`${context}`](query)
+      },
 
-        if (context === 'before' || context === 'after') {
-          return [DATE]
-        }
+      _category: async function (query: string): Promise<Context[]> {
+        const r: Record<string, string> = await this.fetch('category', query);
+        return _map(r);
+      },
 
-        return []
+      _channel: async function (query: string): Promise<Context[]> {
+        const r: Record<string, string> = await this.fetch('channel', query);
+        return _map(r);
+      },
+
+      _user: async function (query: string): Promise<Context[]> {
+        const r: Record<string, string> = await this.fetch('user', query);
+        return _map(r);
+      },
+
+      _file: async function (query: string): Promise<Context[]> {
+        const r: Record<string, string> = await this.fetch('file', query);
+        return _map(r);
+      },
+
+      _bool: async function (query: string) {
+        return <Context[]>(["true", "false"]
+          .filter(s => s.includes(query))
+          .map(v => (<Context> {
+            value: v,
+            name: v
+          }))
+        )
+      },
+
+      _date: async function (){
+        return <Context[]> [DATE]
       }
     }
 

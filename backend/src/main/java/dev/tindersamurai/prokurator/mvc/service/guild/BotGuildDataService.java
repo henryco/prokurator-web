@@ -16,9 +16,9 @@ public class BotGuildDataService implements GuildDataService {
         this.service = service;
     }
 
-    @Override @Cacheable(value="guilds", key = "#sessionId")
-    public String[] filterHandledGuilds(String[] guilds, String sessionId) {
-        log.debug("filterHandledGuilds: {}", sessionId);
+    @Override @Cacheable(value="guilds", key = "#cacheId")
+    public String[] filterHandledGuilds(String[] guilds, String cacheId) {
+        log.debug("filterHandledGuilds: {}", cacheId);
         return service.filterHandledGuilds(guilds);
     }
 }

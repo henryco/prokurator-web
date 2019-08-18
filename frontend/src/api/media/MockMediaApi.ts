@@ -1,9 +1,8 @@
-import PrkMediaApi, {Probe, Page, Content, Details, Channel} from "./PrkMediaApi";
+import PrkMediaApi, {Probe, Page, Content, Details, Channel} from "./";
 
 export default class MockMediaApi implements PrkMediaApi {
 
-  async fetchMediaContent(probe: Probe): Promise<Content[]> {
-    console.log('CALL')
+  async fetchMediaContent(probe: Probe, guild: string): Promise<Content[]> {
     await new Promise(r => setTimeout(r, 1500));
     return [
       {

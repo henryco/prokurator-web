@@ -1,9 +1,30 @@
 <template>
   <div class="board-view">
-    <div class="banner"><!--TODO--></div>
+
+    <div class="info" v-if="c_icon">
+      <div class="avatar">
+        <img :src="c_icon" alt="" class="avatar-icon"/>
+      </div>
+      <div class="banner-left">
+        <!--TODO-->
+      </div>
+    </div>
+    <div class="banner-left" v-else>
+      <!--TODO-->
+    </div>
 
     <div class="board">
-      <board-search class="top" @search="search"/>
+
+      <div class="name">
+        <h1 class="fonted">{{c_name}}</h1>
+      </div>
+
+      <board-search
+        :admin="c_managed"
+        @search="search"
+        :fetch="filter"
+        class="top"
+      />
       <prk-infinity-scroll :next="false" @fetch="scrollEvent">
         <div v-for="item of d_items" :key="item.id">
           {{item}}
@@ -18,16 +39,25 @@
 </template>
 
 <script lang="ts">
-  import {Probe, Query, Page, Content, Details, Channel} from "@/api/media/PrkMediaApi";
+  import {Probe, Query, Page, Content, Details, Channel} from "@/api/media";
   import PrkInfinityScroll, {LoadEvent} from "@/components/scroll"
   import BoardSearch from "@/composites/search/BoardSearch.vue";
   import {ElLoadingComponent} from "element-ui/types/loading";
   import Vue from 'vue';
 
   const SIZE: number = 20;
-  declare interface Data {
+
+  declare interface Guild {
+    id: string;
+    name: string;
+    icon: string;
+    managed: boolean;
+  }
+
+  declare interface State {
     d_loading?: ElLoadingComponent,
     d_items: Content[];
+    d_guild?: Guild;
     d_query?: Query;
     d_page: number;
   }
@@ -40,16 +70,29 @@
       BoardSearch
     },
 
-    data: () => (<Data> {
+    data: () => (<State> {
       d_loading: undefined,
+      d_guild: undefined,
       d_query: undefined,
       d_page: 0,
       d_items: []
     }),
 
     computed: {
-      c_boardId: function () {
-        return this.$route.params.id
+      c_managed: function () {
+        if (!this.d_guild) return false;
+        return this.d_guild.managed
+      },
+      c_icon: function () {
+        if (!this.d_guild) return;
+        return this.d_guild.icon;
+      },
+      c_name: function () {
+        if (!this.d_guild) return;
+        return this.d_guild.name;
+      },
+      c_id: function () {
+        return this.$route.params.id;
       }
     },
 
@@ -62,7 +105,7 @@
             page: this.d_page++,
             size: SIZE
           }
-        })
+        }, this.c_id)
 
         if (this.d_loading) {
           this.d_loading.close()
@@ -71,6 +114,22 @@
 
         this.d_items = content;
         return content;
+      },
+
+      filter: async function (c: string, s: string): Promise<Record<string, string>> {
+        if (c === 'category') {
+          return {'abc': '123', 'cde': 'wow', 'same': 'same'}
+        }
+        if (c === 'channel') {
+          return {}
+        }
+        if (c === 'user') {
+          return {}
+        }
+        if (c === 'file') {
+          return {}
+        }
+        return {}
       },
 
       search: async function (query?: Query) {
@@ -92,8 +151,16 @@
       }
     },
 
-    mounted(): void {
+    mounted: async function () {
       this.startLoader();
+      const guildId = this.$route.params.id;
+      const data = await this.api().guild.getGuildDetails(guildId);
+      this.d_guild = <Guild> {
+        managed: data.admin,
+        name: data.name,
+        icon: data.icon,
+        id: data.id
+      }
     }
   });
 </script>
@@ -106,18 +173,61 @@
     flex-direction: row;
     overflow-x: hidden;
 
+    .fonted {
+      font-family: "Helvetica Neue", Helvetica, "DejaVu Sans Light", Arial, sans-serif;
+      color: #909399;
+    }
+
     .banner {
       width: 100%;
-      max-width: 250px;
+      max-width: 100px;
+    }
+
+    .banner-left {
+      width: 100%;
+      max-width: 200px;
+    }
+
+    .info {
+      width: 100%;
+      max-width: 350px;
+      min-width: 225px;
+      padding-top: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      align-content: center;
+
+      .avatar {
+        width: 55%;
+        height: auto;
+        max-height: 300px;
+        max-width: 300px;
+
+        .avatar-icon {
+          width: 100% !important;
+          height: auto !important;
+          border-radius: 8% 26%;
+          overflow: hidden;
+          opacity: 0.8;
+        }
+      }
     }
 
     .board {
       width: 100%;
       min-width: 720px;
 
+      .name {
+        margin-top: 48px;
+        h1 {
+          font-size: 36px !important;
+        }
+      }
+
       .top {
-        margin-top: 5%;
-        margin-bottom: 2.5%;
+        margin-top: 12px;
+        margin-bottom: 25px;
       }
     }
 
