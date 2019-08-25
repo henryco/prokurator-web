@@ -23,7 +23,6 @@ declare interface Probe {
 declare interface Details {
   id: string;
   name: string;
-  icon: string;
 }
 
 declare interface Channel {
