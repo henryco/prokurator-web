@@ -14,12 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController @Api @Slf4j
 @RequestMapping("/api/protected/guild")
@@ -49,12 +49,18 @@ public class GuildController {
         private Boolean admin;
     }
 
+    @Value @Builder @AllArgsConstructor
+    private static class UserDetailsForm {
+        private String id;
+        private String name;
+    }
+
     @GetMapping("/{id}")
     public GuildDetailsForm getDetails(
             @PathVariable("id") String id,
             Authentication authentication
     ) throws TokenExpiredException, NotFoundException {
-        log.debug("getDetails: {}", authentication);
+        log.debug("getDetails: {}, {}", id, authentication);
 
         val principal = ((DiscordTokenPrincipal) authentication.getPrincipal());
         val token = tokenAccessService.getToken(principal.getTokenId());
@@ -79,6 +85,21 @@ public class GuildController {
                 .icon(guild.getIcon())
                 .build();
     }
+
+    @GetMapping("/{id}/users")
+    public List<UserDetailsForm> fetchUsers(
+            @RequestParam(value = "query", required = false) String query,
+            @PathVariable("id") String id
+    ) {
+        log.debug("fetchUsers: {}, {}", id, query);
+        final Stream<UserDetailsForm> stream = Arrays.stream(guildDataService.fetchGuildMembers(id))
+                .map(e -> new UserDetailsForm(e.getId(), e.getName()));
+        if (query == null || query.isEmpty())
+            return stream.limit(100).collect(Collectors.toList());
+        return stream.filter(e -> e.getName().contains(query))
+                .limit(100).collect(Collectors.toList());
+    }
+
 
     private static boolean isOwner(String permissions) {
         val p = Long.decode(permissions);

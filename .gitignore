@@ -42,3 +42,4 @@ jwt.properties
 .classpath
 
 .internal
+/resources/

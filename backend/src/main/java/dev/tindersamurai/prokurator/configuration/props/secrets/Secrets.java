@@ -6,7 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component @Slf4j
-public class Secrets implements ProkuratorSecrets{
+public class Secrets implements ProkuratorSecrets {
 
 	private final Environment environment;
 
@@ -33,5 +33,10 @@ public class Secrets implements ProkuratorSecrets{
 	@Override
 	public String getOAuthRedirect() {
 		return environment.getRequiredProperty("prokurator.secrets.discord.oauth.redirect");
+	}
+
+	@Override
+	public String getBotToken() {
+		return environment.getRequiredProperty("prokurator.secrets.discord.bot.token");
 	}
 }

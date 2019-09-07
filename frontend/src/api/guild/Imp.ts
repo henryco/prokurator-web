@@ -1,4 +1,4 @@
-import PrkGuildApi, {GuildFormData} from "@/api/guild/index";
+import PrkGuildApi, {DetailsEntity, GuildFormData} from "@/api/guild/index";
 import axios from "axios";
 
 export default class GuildApiImp implements PrkGuildApi {
@@ -7,4 +7,11 @@ export default class GuildApiImp implements PrkGuildApi {
     const r = await axios.get(`/api/protected/guild/${id}`)
     return r.data;
   }
+
+  async fetchGuildMembers(id: string | number, query?: string): Promise<DetailsEntity[]> {
+    const q = (query && query.length > 0) ? `?query=${query}` : ""
+    const r = await axios.get(`/api/protected/guild/${id}/users${q}`)
+    return r.data;
+  }
+
 }

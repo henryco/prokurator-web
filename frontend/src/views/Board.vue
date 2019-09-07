@@ -116,23 +116,26 @@
         return content;
       },
 
-      filter: async function (c: string, s: string): Promise<Record<string, string>> {
-        if (c === 'category') {
-          return {'abc': '123', 'cde': 'wow', 'same': 'same'}
-        }
+      filter: async function (c: string, q: string): Promise<Record<string, string>> {
+        const guildId = this.$route.params.id;
         if (c === 'channel') {
           return {}
         }
         if (c === 'user') {
-          return {}
+          const members = await this.api().guild.fetchGuildMembers(guildId, q);
+          let obj: Record<string, string> = {}
+          for (let m of members) {
+            obj[`${m.id}`] = m.name
+          }
+          return obj
         }
-        if (c === 'file') {
-          return {}
-        }
+
         return {}
       },
 
       search: async function (query?: Query) {
+        console.log('search: ')
+        console.dir(query)
         this.d_query = query;
         this.startLoader();
         await this.load();

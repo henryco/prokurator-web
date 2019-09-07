@@ -11,8 +11,7 @@ export default class MockMediaApi implements PrkMediaApi {
         deleted: false,
         author: {
           id: "12345",
-          name: "Someone",
-          icon: ""
+          name: "Someone"
         },
         media: {
           id: "wesdfbdf",
@@ -27,8 +26,7 @@ export default class MockMediaApi implements PrkMediaApi {
           nsfw: false,
           guild: {
             id: "sdfbertb34345",
-            name: "Some guild",
-            icon: "dfgdfb.png"
+            name: "Some guild"
           }
         }
       },
