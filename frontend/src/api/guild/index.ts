@@ -16,6 +16,8 @@ export default interface PrkGuildApi {
   getGuildDetails(id: string | number): Promise<GuildFormData>;
 
   fetchGuildMembers(id: string | number, query?: string): Promise<DetailsEntity[]>;
+
+  fetchGuildChannels(id: string | number, query?: string): Promise<DetailsEntity[]>;
 }
 
 import MockGuildApi from "./Mock"

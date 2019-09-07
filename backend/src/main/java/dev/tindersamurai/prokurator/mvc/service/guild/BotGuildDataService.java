@@ -43,6 +43,10 @@ public class BotGuildDataService implements GuildDataService {
     @Override @Cacheable(value="channels", key = "#guildId")
     public Details[] fetchGuildChannels(String guildId) {
         log.debug("fetchGuildChannels: {}", guildId);
-        return new Details[0];
+        return guildRepository.getGuildChannels(secrets.getBotToken(), guildId).stream()
+                .filter(e -> e.getType() == 0)
+                .map(e -> new Details(e.getId(), e.getName()))
+                .toArray(Details[]::new);
     }
+
 }

@@ -119,7 +119,12 @@
       filter: async function (c: string, q: string): Promise<Record<string, string>> {
         const guildId = this.$route.params.id;
         if (c === 'channel') {
-          return {}
+          const channels = await this.api().guild.fetchGuildChannels(guildId, q);
+          let obj: Record<string, string> = {}
+          for (let m of channels) {
+            obj[`${m.id}`] = m.name
+          }
+          return obj
         }
         if (c === 'user') {
           const members = await this.api().guild.fetchGuildMembers(guildId, q);

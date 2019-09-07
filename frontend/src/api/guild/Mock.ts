@@ -18,5 +18,13 @@ export default class MockGuildApi implements PrkGuildApi {
     }];
   }
 
+  async fetchGuildChannels(id: string | number, query?: string): Promise<DetailsEntity[]> {
+    return [{
+      id: '23454623434132',
+      name: 'some channel'
+    }];
+  }
+
+
 
 }

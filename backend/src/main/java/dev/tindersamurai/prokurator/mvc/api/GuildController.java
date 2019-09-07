@@ -50,7 +50,7 @@ public class GuildController {
     }
 
     @Value @Builder @AllArgsConstructor
-    private static class UserDetailsForm {
+    private static class DetailsForm {
         private String id;
         private String name;
     }
@@ -87,19 +87,34 @@ public class GuildController {
     }
 
     @GetMapping("/{id}/users")
-    public List<UserDetailsForm> fetchUsers(
+    public List<DetailsForm> fetchUsers(
             @RequestParam(value = "query", required = false) String query,
             @PathVariable("id") String id
     ) {
         log.debug("fetchUsers: {}, {}", id, query);
-        final Stream<UserDetailsForm> stream = Arrays.stream(guildDataService.fetchGuildMembers(id))
-                .map(e -> new UserDetailsForm(e.getId(), e.getName()));
+        final Stream<DetailsForm> stream = Arrays.stream(guildDataService.fetchGuildMembers(id))
+                .map(e -> new DetailsForm(e.getId(), e.getName()));
         if (query == null || query.isEmpty())
             return stream.limit(100).collect(Collectors.toList());
         return stream.filter(e -> e.getName().contains(query))
                 .limit(100).collect(Collectors.toList());
     }
 
+    @GetMapping("/{id}/channels")
+    public List<DetailsForm> fetchChannels(
+            @RequestParam(value = "query", required = false) String query,
+            @PathVariable("id") String id
+    ) {
+        log.debug("fetchChannels: {}, {}", id, query);
+
+        final Stream<DetailsForm> stream = Arrays.stream(guildDataService.fetchGuildChannels(id))
+                .map(e -> new DetailsForm(e.getId(), e.getName()));
+        if (query == null || query.isEmpty())
+            return stream.collect(Collectors.toList());
+
+        return stream.filter(e -> e.getName().contains(query))
+                .collect(Collectors.toList());
+    }
 
     private static boolean isOwner(String permissions) {
         val p = Long.decode(permissions);

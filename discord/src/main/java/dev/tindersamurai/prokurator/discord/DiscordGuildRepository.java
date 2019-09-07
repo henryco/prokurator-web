@@ -34,9 +34,27 @@ public interface DiscordGuildRepository {
         private Boolean deaf;
     }
 
+    enum Type {
+        member, role
+    }
+
+    @Value class PermOverwrite {
+        private String id;
+        private Type type;
+        private int allow;
+        private int deny;
+    }
+
+    @Value class GuildChannel {
+        private PermOverwrite[] permission_overwrites;
+        private String name;
+        private String id;
+        private int type;
+    }
+
     @GET("{gid}/members")
     Call<List<GuildMember>> _guildMembers(
-            @Header("Authorization") String authorization,
+            @Header("Authorization") String botToken,
             @Path("gid") String gid,
             @Query("limit") int limit,
             @Query("after") String afterId
@@ -44,16 +62,35 @@ public interface DiscordGuildRepository {
 
     @GET("{gid}/members")
     Call<List<GuildMember>> _guildMembers(
-            @Header("Authorization") String authorization,
+            @Header("Authorization") String botToken,
             @Path("gid") String gid,
             @Query("limit") int limit
     );
+
+    @GET("{gid}/channels")
+    Call<List<GuildChannel>> _guildChannels(
+            @Header("Authorization") String botToken,
+            @Path("gid") String gid
+    );
+
+    default List<GuildChannel> getGuildChannels(String botToken, String guildId) {
+        try {
+            val response = _guildChannels("Bot " + botToken, guildId).execute();
+            if (!response.isSuccessful())
+                throw new RuntimeException("Cannot fetch guild channels: "
+                        + (response.errorBody() == null ? "" : response.errorBody().string())
+                );
+            return response.body();
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot fetch guild channels", e);
+        }
+    }
 
     default List<GuildMember> getGuildMembers(String botToken, String guildId) {
         try {
             val response = _guildMembers("Bot " + botToken, guildId, 1000).execute();
             if (!response.isSuccessful())
-                throw new RuntimeException("Cannot exchange guild members: "
+                throw new RuntimeException("Cannot fetch guild members: "
                         + (response.errorBody() == null ? "" : response.errorBody().string())
                 );
             val list = response.body();
@@ -68,7 +105,7 @@ public interface DiscordGuildRepository {
                 val last = list.get(list.size() - 1).getUser().getId();
                 val r = _guildMembers("Bot " + botToken, guildId,1000, last).execute();
                 if (!r.isSuccessful())
-                    throw new RuntimeException("Cannot exchange guild members: "
+                    throw new RuntimeException("Cannot fetch guild members: "
                             + (r.errorBody() == null ? "" : r.errorBody().string())
                     );
 
@@ -84,7 +121,7 @@ public interface DiscordGuildRepository {
 
             return list;
         } catch (Exception e) {
-            throw new RuntimeException("Cannot exchange guild members", e);
+            throw new RuntimeException("Cannot fetch guild members", e);
         }
     }
 
