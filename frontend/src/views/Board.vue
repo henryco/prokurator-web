@@ -26,8 +26,23 @@
         class="top"
       />
       <prk-infinity-scroll :next="false" @fetch="scrollEvent">
-        <div v-for="item of d_items" :key="item.id">
-          {{item}}
+        <div class="image-container">
+          <prk-image-card
+            v-for="item of d_items"
+            :key="item.id"
+            :image="item.media.url"
+            class="g-image"
+          >
+            <prk-avatar
+              :icon="item.author.icon"
+              :name="item.author.name"
+            >
+              <span slot="right" class="g-date">
+                {{new Date(Number(item.date)).toLocaleDateString()}}
+              </span>
+            </prk-avatar>
+
+          </prk-image-card>
         </div>
       </prk-infinity-scroll>
     </div>
@@ -43,6 +58,8 @@
   import PrkInfinityScroll, {LoadEvent} from "@/components/scroll"
   import BoardSearch from "@/composites/search/BoardSearch.vue";
   import {ElLoadingComponent} from "element-ui/types/loading";
+  import PrkImageCard from "@/components/card/PrkImageCard.vue";
+  import PrkAvatar from "@/components/avatar/PrkAvatar.vue";
   import Vue from 'vue';
 
   const SIZE: number = 20;
@@ -67,7 +84,9 @@
 
     components: {
       PrkInfinityScroll,
-      BoardSearch
+      PrkImageCard,
+      BoardSearch,
+      PrkAvatar
     },
 
     data: () => (<State> {
@@ -237,6 +256,24 @@
       .top {
         margin-top: 12px;
         margin-bottom: 25px;
+      }
+    }
+
+    .image-container {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+
+      .g-image {
+        max-width: 23%;
+        height: auto;
+        margin: 10px;
+      }
+
+      .g-date {
+        font-size: 13px;
       }
     }
 

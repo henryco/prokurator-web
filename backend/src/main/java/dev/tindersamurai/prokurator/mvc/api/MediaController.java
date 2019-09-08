@@ -166,7 +166,7 @@ public class MediaController {
         }
 
         val query = probe.getQuery();
-        if (query != null && query.getDeleted() != null && query.getDeleted().length != 0) {
+        if (query != null && query.getDeleted() != null && Arrays.stream(query.getDeleted()).anyMatch(d -> d)) {
             // So, we check it coz only server owners can see deleted messages (generally)
             if (!isOwner(guild.get().getPermissions())) {
                 throw new IllegalAccessException("User dont have permissions to read [deleted] messages");
