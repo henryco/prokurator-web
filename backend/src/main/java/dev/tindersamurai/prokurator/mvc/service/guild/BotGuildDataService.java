@@ -36,7 +36,7 @@ public class BotGuildDataService implements GuildDataService {
     public Details[] fetchGuildMembers(String guildId) {
         log.debug("fetchGuildMembers: {}", guildId);
         return guildRepository.getGuildMembers(secrets.getBotToken(), guildId).stream()
-                .map(l -> new Details(l.getUser().getId(), l.getUser().getUsername()))
+                .map(l -> new Details(l.getUser().getId(), l.getUser().getUsername(), l.getUser().getAvatar()))
                 .toArray(Details[]::new);
     }
 
@@ -45,7 +45,7 @@ public class BotGuildDataService implements GuildDataService {
         log.debug("fetchGuildChannels: {}", guildId);
         return guildRepository.getGuildChannels(secrets.getBotToken(), guildId).stream()
                 .filter(e -> e.getType() == 0)
-                .map(e -> new Details(e.getId(), e.getName()))
+                .map(e -> new Details(e.getId(), e.getName(), null))
                 .toArray(Details[]::new);
     }
 

@@ -2,10 +2,7 @@ package dev.tindersamurai.prokurator.configuration.beans;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.tindersamurai.prokurator.backend.commons.client.ClientFactory;
-import dev.tindersamurai.prokurator.backend.commons.service.ICollectorService;
-import dev.tindersamurai.prokurator.backend.commons.service.IConfigurationService;
-import dev.tindersamurai.prokurator.backend.commons.service.IFileStorageService;
-import dev.tindersamurai.prokurator.backend.commons.service.IGuildService;
+import dev.tindersamurai.prokurator.backend.commons.service.*;
 import dev.tindersamurai.prokurator.configuration.props.properties.ProkuratorProperties;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +33,12 @@ public class CoreBackendBeans {
 	public IConfigurationService provideConfigurationServiceClient(RSCProps p) {
 		log.debug("provideConfigurationServiceClient: {}", p);
 		return ClientFactory.createConfigurationClient(p.getUrl(), p.getMapper());
+	}
+
+	@Bean
+	public IMediaService provideMediaServiceClient(RSCProps p) {
+		log.debug("provideMediaServiceClient: {}", p);
+		return ClientFactory.createMediaClient(p.getUrl(), p.getMapper());
 	}
 
 	@Bean

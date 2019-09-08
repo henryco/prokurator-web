@@ -9,6 +9,7 @@ public interface GuildDataService {
     @Value @Builder @AllArgsConstructor class Details {
         private String id;
         private String name;
+        private String icon;
     }
 
     String[] filterHandledGuilds(String[] guilds, String cacheId);

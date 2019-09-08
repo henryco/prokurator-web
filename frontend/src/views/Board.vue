@@ -58,7 +58,7 @@
     d_loading?: ElLoadingComponent,
     d_items: Content[];
     d_guild?: Guild;
-    d_query?: Query;
+    d_query: Query;
     d_page: number;
   }
 
@@ -73,7 +73,7 @@
     data: () => (<State> {
       d_loading: undefined,
       d_guild: undefined,
-      d_query: undefined,
+      d_query: {},
       d_page: 0,
       d_items: []
     }),
@@ -141,7 +141,8 @@
       search: async function (query?: Query) {
         console.log('search: ')
         console.dir(query)
-        this.d_query = query;
+        this.d_query = (query === undefined) ? {} : query;
+        this.d_page = 0
         this.startLoader();
         await this.load();
       },

@@ -4,7 +4,8 @@ import axios from "axios";
 export default class MediaApi implements PrkMediaApi {
 
   async fetchMediaContent(probe: Probe, guild: string): Promise<Content[]> {
-    return [];
+    const r = await axios.post(`/api/protected/media/${guild}`, probe)
+    return r.data
   }
 
 }

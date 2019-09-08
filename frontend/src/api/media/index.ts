@@ -16,20 +16,21 @@ declare interface Query {
 }
 
 declare interface Probe {
-  query?: Query;
+  query: Query;
   page: Page;
 }
 
 declare interface Details {
   id: string;
   name: string;
+  icon?: string;
 }
 
 declare interface Channel {
   id: string;
   name: string;
   nsfw: boolean;
-  guild: Details;
+  guild: string;
   category?: string;
 }
 

@@ -36,7 +36,7 @@
         <dependency>
             <groupId>org.bitbucket.tinder-samurai.prokurator-backend</groupId>
             <artifactId>commons</artifactId>
-            <version>b9188c48e1</version>
+            <version>1.0.2-beta</version>
         </dependency>
 
         <dependency>
