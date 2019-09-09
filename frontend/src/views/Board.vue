@@ -27,22 +27,26 @@
       />
       <prk-infinity-scroll :next="false" @fetch="scrollEvent">
         <div class="image-container">
-          <prk-image-card
-            v-for="item of d_items"
-            :key="item.id"
-            :image="item.media.url"
-            class="g-image"
-          >
-            <prk-avatar
-              :icon="item.author.icon"
-              :name="item.author.name"
-            >
-              <span slot="right" class="g-date">
-                {{new Date(Number(item.date)).toLocaleDateString()}}
-              </span>
-            </prk-avatar>
-
-          </prk-image-card>
+          <div v-for="i in 4" class="image-column">
+            <div class="image-padding">
+              <prk-image-card
+                v-for="k of c_items.length"
+                v-if="_inColumn(i - 1, k - 1, 4)"
+                :key="c_items[k - 1].id"
+                :image="c_items[k - 1].media.url"
+                class="g-image"
+              >
+                <prk-avatar
+                  :icon="c_items[k - 1].author.icon"
+                  :name="c_items[k - 1].author.name"
+                >
+                  <span slot="right" class="g-date">
+                    {{_dateFormat(c_items[k - 1].date)}}
+                  </span>
+                </prk-avatar>
+              </prk-image-card>
+            </div>
+          </div>
         </div>
       </prk-infinity-scroll>
     </div>
@@ -60,6 +64,7 @@
   import {ElLoadingComponent} from "element-ui/types/loading";
   import PrkImageCard from "@/components/card/PrkImageCard.vue";
   import PrkAvatar from "@/components/avatar/PrkAvatar.vue";
+  import moment from "moment"
   import Vue from 'vue';
 
   const SIZE: number = 20;
@@ -112,6 +117,9 @@
       },
       c_id: function () {
         return this.$route.params.id;
+      },
+      c_items: function (): Content[] {
+        return this.d_items ? this.d_items : []
       }
     },
 
@@ -176,6 +184,14 @@
         this.d_loading = this.loadingService({
           fullscreen: true
         })
+      },
+
+      _dateFormat: function (date: number | string): string {
+        return moment(new Date(Number(date))).format('MM/DD/YYYY');
+      },
+
+      _inColumn: function (i: number, k: number, cols: number): boolean {
+        return ((k - i) % cols == 0)
       }
     },
 
@@ -263,13 +279,25 @@
       width: 100%;
       display: flex;
       flex-direction: row;
-      justify-content: flex-start;
+      justify-content: center;
       flex-wrap: wrap;
+      align-items: stretch;
+
+      .image-column {
+        max-width: 25%;
+        width: 25%;
+        /*min-width: 200px;*/
+      }
+
+      .image-padding {
+        padding: 10px;
+      }
 
       .g-image {
-        max-width: 23%;
+        width: 100%;
         height: auto;
-        margin: 10px;
+        margin-top: 20px;
+        margin-bottom: 20px;
       }
 
       .g-date {

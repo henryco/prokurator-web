@@ -26,8 +26,8 @@ export default Vue.mixin(Vue.extend({
   methods: <ApiMixin> {
     api: () => (<Api> {
       general: new GeneralApi(),
-      media: new MediaApi(),
-      // media: new MockMediaApi(),
+      // media: new MediaApi(),
+      media: new MockMediaApi(),
       guild: new GuildApiImp()
     })
   }
