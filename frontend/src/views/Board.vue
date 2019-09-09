@@ -283,10 +283,14 @@
       flex-wrap: wrap;
       align-items: stretch;
 
+      -webkit-user-select: none; /* Safari */
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* IE10+/Edge */
+      user-select: none; /* Standard */
+
       .image-column {
         max-width: 25%;
         width: 25%;
-        /*min-width: 200px;*/
       }
 
       .image-padding {

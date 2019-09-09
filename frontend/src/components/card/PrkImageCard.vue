@@ -1,9 +1,19 @@
 <template>
   <el-card :body-style="{ padding: '0px' }">
 
-    <el-image :src="image" class="image" @load="_loaded">
-      <span slot="placeholder">Loading...</span>
-    </el-image>
+    <div class="hover-area">
+
+      <div class="flip" v-if="d_loaded">
+        <div class="flip-content">
+          <slot name="flip"/>
+        </div>
+      </div>
+
+      <el-image :src="image" class="image" @load="_loaded">
+        <span slot="placeholder">Loading...</span>
+      </el-image>
+    </div>
+
 
     <div style="padding: 14px;" v-if="d_loaded" class="content">
       <slot/>
@@ -37,6 +47,30 @@
 </script>
 
 <style scoped lang="scss">
+
+  .hover-area:hover .flip {
+    display: block !important;
+  }
+
+  .hover-area {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .flip {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+
+    .flip-content {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+  }
 
   .content {
     display: flex;
