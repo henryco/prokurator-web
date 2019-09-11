@@ -41,7 +41,7 @@ public class GuildClient implements DiscordGuildClient {
 
     private List<GuildChannel> fetchGuildChannels(String botToken, String guildId) throws IOException {
         val response = repo._guildChannels("Bot " + botToken, guildId).execute();
-        val repeat = onError(response, "Cannot fetch guild channels");
+        val repeat = onError(response, "Cannot fetch guild channels", GuildClient.class);
         if (repeat) return fetchGuildChannels(botToken, guildId);
 
         return response.body();
@@ -49,7 +49,7 @@ public class GuildClient implements DiscordGuildClient {
 
     private List<GuildMember> fetchGuildMembers(String botToken, String guildId, String last) throws IOException {
         val r = repo._guildMembers("Bot " + botToken, guildId,1000, last).execute();
-        val repeat = onError(r, "Cannot fetch guild members");
+        val repeat = onError(r, "Cannot fetch guild members", GuildClient.class);
         if (repeat) return fetchGuildMembers(botToken, guildId, last);
 
         return r.body();
@@ -58,7 +58,7 @@ public class GuildClient implements DiscordGuildClient {
     private List<GuildMember> fetchGuildMembers(String botToken, String guildId) throws IOException {
 
         val response = repo._guildMembers("Bot " + botToken, guildId, 1000).execute();
-        val repeat = onError(response, "Cannot fetch guild members");
+        val repeat = onError(response, "Cannot fetch guild members", GuildClient.class);
         if (repeat) return fetchGuildMembers(botToken, guildId);
 
         val list = response.body();

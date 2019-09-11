@@ -2,9 +2,9 @@ package dev.tindersamurai.prokurator.configuration.security.auth.details;
 
 import dev.tindersamurai.prokurator.configuration.props.secrets.ProkuratorSecrets;
 import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DefaultDiscordUserDetails;
-import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository;
 import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository.TokenExchangeForm;
-import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository;
+import dev.tindersamurai.prokurator.discord.client.DiscordTokenClient;
+import dev.tindersamurai.prokurator.discord.client.DiscordUserClient;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,17 +19,18 @@ import static dev.tindersamurai.prokurator.configuration.security.auth.details.u
 @Service @Slf4j
 public class DiscordDetailsService implements IDiscordDetailsService {
 
-	private final DiscordTokenExchangeRepository exchangeRepository;
-	private final DiscordUserInfoRepository userInfoRepository;
+	private final DiscordTokenClient discordTokenClient;
+	private final DiscordUserClient discordUserClient;
 	private final ProkuratorSecrets secrets;
 
 	public DiscordDetailsService(
-			DiscordTokenExchangeRepository exchangeRepository,
-			DiscordUserInfoRepository userInfoRepository,
+			DiscordTokenClient discordTokenClient,
+			DiscordUserClient discordUserClient,
 			ProkuratorSecrets secrets
 	) {
-		this.exchangeRepository = exchangeRepository;
-		this.userInfoRepository = userInfoRepository;
+
+		this.discordTokenClient = discordTokenClient;
+		this.discordUserClient = discordUserClient;
 		this.secrets = secrets;
 	}
 
@@ -44,7 +45,7 @@ public class DiscordDetailsService implements IDiscordDetailsService {
 				secrets.getOAuthScope()
 		);
 
-		val exchange = exchangeRepository.exchange(exchangeForm);
+		val exchange = discordTokenClient.exchange(exchangeForm);
 
 		val token = new TokenDetails(
 				UUID.randomUUID().toString(),
@@ -53,7 +54,7 @@ public class DiscordDetailsService implements IDiscordDetailsService {
 				now() + exchange.getExpiresIn()
 		);
 
-		val user = userInfoRepository.getUserInfo(token.getAccess());
+		val user = discordUserClient.getUserInfo(token.getAccess());
 
 		return new DefaultDiscordUserDetails(user.getId(), token, "USER");
 	}

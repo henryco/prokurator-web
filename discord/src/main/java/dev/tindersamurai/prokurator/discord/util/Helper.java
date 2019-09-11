@@ -21,10 +21,10 @@ public class Helper {
         }
     }
 
-    public static boolean onError(Response r, String msg) throws IOException {
+    public static boolean onError(Response r, String msg, Class<?> clazz) throws IOException {
         if (r.code() == 429) {
 
-            log.warning("Request limit exceeded [CODE 429]");
+            log.warning("Request limit exceeded [CODE 429] " + clazz.getName());
             if (r.errorBody() == null) {
                 sleep(1000);
             }

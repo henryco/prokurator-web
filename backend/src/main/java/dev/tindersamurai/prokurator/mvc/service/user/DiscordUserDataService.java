@@ -1,8 +1,8 @@
 package dev.tindersamurai.prokurator.mvc.service.user;
 
-import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository;
 import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository.GuildsResponse;
 import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository.UserResponse;
+import dev.tindersamurai.prokurator.discord.client.DiscordUserClient;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +15,20 @@ import java.util.stream.Collectors;
 @Service @Slf4j
 public class DiscordUserDataService implements UserDataService {
 
-	private final DiscordUserInfoRepository userInfoRepository;
+
+	private final DiscordUserClient discordUserClient;
 
 	@Autowired
-	public DiscordUserDataService(DiscordUserInfoRepository userInfoRepository) {
-		this.userInfoRepository = userInfoRepository;
+	public DiscordUserDataService(DiscordUserClient discordUserClient) {
+		this.discordUserClient = discordUserClient;
 	}
+
 
 	@Override @Cacheable(value="self", key = "#userAccessToken")
 	public UserData retrieveUserData(String userAccessToken) throws TokenExpiredException {
 		log.debug("retrieveUserData: {}", userAccessToken);
 		try {
-			val r = userInfoRepository.getUserInfo(userAccessToken);
+			val r = discordUserClient.getUserInfo(userAccessToken);
 			return mapUser(r);
 		} catch (Exception e) {
 			throw new TokenExpiredException(userAccessToken, e);
@@ -37,7 +39,7 @@ public class DiscordUserDataService implements UserDataService {
 	public UserData retrieveUserData(String userAccessToken, String userId) throws TokenExpiredException {
 		log.debug("retrieveUserData: {}, {}", userAccessToken, userId);
 		try {
-			val r = userInfoRepository.getUserInfo(userAccessToken, userId);
+			val r = discordUserClient.getUserInfo(userAccessToken, userId);
 			return mapUser(r);
 		} catch (Exception e) {
 			throw new TokenExpiredException(userAccessToken, e);
@@ -48,7 +50,7 @@ public class DiscordUserDataService implements UserDataService {
 	public List<Guild> retrieveUserGuilds(String userAccessToken) throws TokenExpiredException {
 		log.debug("retrieveUserGuilds: {}", userAccessToken);
 		try {
-			return userInfoRepository.getUserGuilds(userAccessToken).stream()
+			return discordUserClient.getUserGuilds(userAccessToken).stream()
 					.map(DiscordUserDataService::mapGuild)
 					.collect(Collectors.toList());
 		} catch (Exception e) {
