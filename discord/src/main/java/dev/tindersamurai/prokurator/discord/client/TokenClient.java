@@ -2,6 +2,7 @@ package dev.tindersamurai.prokurator.discord.client;
 
 import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository;
 import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository.TokenResponse;
+import lombok.extern.java.Log;
 import lombok.val;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.concurrent.Executors;
 import static dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository.*;
 import static dev.tindersamurai.prokurator.discord.util.Helper.onError;
 
+@Log
 public class TokenClient implements DiscordTokenClient {
 
     private final DiscordTokenExchangeRepository repo;
@@ -33,6 +35,8 @@ public class TokenClient implements DiscordTokenClient {
 
     @Override
     public TokenResponse exchange(TokenExchangeForm data) {
+        log.info("exchange: " + data);
+
         val map = new HashMap<String, String>(); {
             map.put("code", data.getCode());
             map.put("grant_type", "authorization_code");
@@ -51,6 +55,8 @@ public class TokenClient implements DiscordTokenClient {
 
     @Override
     public TokenResponse refresh(TokenRefreshForm data) {
+        log.info("refresh: " + data);
+
         val map = new HashMap<String, String>(); {
             map.put("client_id", data.getClientId());
             map.put("client_secret", data.getClientSecret());

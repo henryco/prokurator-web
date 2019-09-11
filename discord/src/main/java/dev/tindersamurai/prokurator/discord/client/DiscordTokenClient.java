@@ -1,9 +1,11 @@
 package dev.tindersamurai.prokurator.discord.client;
 
-import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository;
+import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository.TokenResponse;
+
+import static dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository.*;
 
 public interface DiscordTokenClient {
-    DiscordTokenExchangeRepository.TokenResponse exchange(DiscordTokenExchangeRepository.TokenExchangeForm data);
+    TokenResponse exchange(TokenExchangeForm data);
 
-    DiscordTokenExchangeRepository.TokenResponse refresh(DiscordTokenExchangeRepository.TokenRefreshForm data);
+    TokenResponse refresh(TokenRefreshForm data);
 }

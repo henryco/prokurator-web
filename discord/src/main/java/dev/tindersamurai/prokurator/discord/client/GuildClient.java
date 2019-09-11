@@ -1,6 +1,7 @@
 package dev.tindersamurai.prokurator.discord.client;
 
 import dev.tindersamurai.prokurator.discord.DiscordGuildRepository;
+import lombok.extern.java.Log;
 import lombok.val;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.util.concurrent.Executors;
 import static dev.tindersamurai.prokurator.discord.DiscordGuildRepository.*;
 import static dev.tindersamurai.prokurator.discord.util.Helper.onError;
 
+@Log
 public class GuildClient implements DiscordGuildClient {
 
     private final DiscordGuildRepository repo;
@@ -23,6 +25,7 @@ public class GuildClient implements DiscordGuildClient {
 
     @Override
     public List<GuildChannel> getGuildChannels(String botToken, String guildId) {
+        log.info("getGuildChannels: " + botToken + ", " + guildId);
         try {
             return executor.submit(() -> fetchGuildChannels(botToken, guildId)).get();
         } catch (Exception e) {
@@ -32,6 +35,7 @@ public class GuildClient implements DiscordGuildClient {
 
     @Override
     public List<GuildMember> getGuildMembers(String botToken, String guildId) {
+        log.info("getGuildMembers: " + botToken + ", " + guildId);
         try {
             return executor.submit(() -> fetchGuildMembers(botToken, guildId)).get();
         } catch (Exception e) {

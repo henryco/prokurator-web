@@ -3,6 +3,7 @@ package dev.tindersamurai.prokurator.discord.client;
 import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository;
 import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository.GuildsResponse;
 import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository.UserResponse;
+import lombok.extern.java.Log;
 import lombok.val;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.concurrent.Executors;
 
 import static dev.tindersamurai.prokurator.discord.util.Helper.onError;
 
+@Log
 public class UserClient implements DiscordUserClient {
 
     private final DiscordUserInfoRepository repo;
@@ -40,6 +42,7 @@ public class UserClient implements DiscordUserClient {
 
     @Override
     public UserResponse getUserInfo(String token, String uid) {
+        log.info("getUserInfo: " + token + ", " + uid);
         try {
             return executor.submit(() -> fetchUserInfo(token, uid)).get();
         } catch (Exception e) {
@@ -49,6 +52,8 @@ public class UserClient implements DiscordUserClient {
 
     @Override
     public List<GuildsResponse> getUserGuilds(String token) {
+        log.info("getUserGuilds: " + token);
+
         try {
             return executor.submit(() -> fetchUserGuilds(token)).get();
         } catch (Exception e) {

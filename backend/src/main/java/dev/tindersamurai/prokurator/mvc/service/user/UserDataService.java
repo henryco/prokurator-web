@@ -7,11 +7,11 @@ import java.util.List;
 public interface UserDataService {
 
 	final class TokenExpiredException extends Exception {
-		TokenExpiredException(String token) {
+		public TokenExpiredException(String token) {
 			super("Token expired: " + token);
 		}
 
-		TokenExpiredException(String token, Throwable e) {
+		public TokenExpiredException(String token, Throwable e) {
 			super("Token expired: " + token, e);
 		}
 	}

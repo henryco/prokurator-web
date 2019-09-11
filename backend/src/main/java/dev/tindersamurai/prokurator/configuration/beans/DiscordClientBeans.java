@@ -15,16 +15,16 @@ public class DiscordClientBeans {
 
     @Bean
     public DiscordGuildClient provideDiscordGuildClient(ObjectMapper mapper) {
-        return new GuildClient(createClient(DiscordGuildRepository.class, mapper), 10);
+        return new GuildClient(createClient(DiscordGuildRepository.class, mapper), 5);
     }
 
     @Bean
     public DiscordTokenClient provideDiscordTokenClient(ObjectMapper mapper) {
-        return new TokenClient(createClient(DiscordTokenExchangeRepository.class, mapper), 10);
+        return new TokenClient(createClient(DiscordTokenExchangeRepository.class, mapper), 5);
     }
 
     @Bean
     public DiscordUserClient provideDiscordUserClient(ObjectMapper mapper) {
-        return new UserClient(createClient(DiscordUserInfoRepository.class, mapper), 10);
+        return new UserClient(createClient(DiscordUserInfoRepository.class, mapper), 5);
     }
 }
