@@ -29,7 +29,7 @@ public class DiscordUserDataService implements UserDataService {
 			val r = userInfoRepository.getUserInfo(userAccessToken);
 			return mapUser(r);
 		} catch (Exception e) {
-			throw new TokenExpiredException(userAccessToken);
+			throw new TokenExpiredException(userAccessToken, e);
 		}
 	}
 
@@ -40,7 +40,7 @@ public class DiscordUserDataService implements UserDataService {
 			val r = userInfoRepository.getUserInfo(userAccessToken, userId);
 			return mapUser(r);
 		} catch (Exception e) {
-			throw new TokenExpiredException(userAccessToken);
+			throw new TokenExpiredException(userAccessToken, e);
 		}
 	}
 
@@ -52,7 +52,7 @@ public class DiscordUserDataService implements UserDataService {
 					.map(DiscordUserDataService::mapGuild)
 					.collect(Collectors.toList());
 		} catch (Exception e) {
-			throw new TokenExpiredException(userAccessToken);
+			throw new TokenExpiredException(userAccessToken, e);
 		}
 	}
 

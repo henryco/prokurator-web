@@ -25,7 +25,8 @@
         :fetch="filter"
         class="top"
       />
-      <prk-infinity-scroll :next="false" @fetch="scrollEvent">
+
+      <prk-infinity-scroll :next="false" delay="500" @fetch="scrollEvent">
         <div class="image-container">
           <div v-for="i in 4" class="image-column">
             <div class="image-padding">
@@ -44,6 +45,13 @@
                     {{_dateFormat(c_items[k - 1].date)}}
                   </span>
                 </prk-avatar>
+
+                <prk-card-flip
+                  slot="flip"
+                  @details="details(c_items[k - 1])"
+                  @report="report(c_items[k - 1])"
+                  @open="open(c_items[k - 1])"
+                />
               </prk-image-card>
             </div>
           </div>
@@ -63,6 +71,7 @@
   import BoardSearch from "@/composites/search/BoardSearch.vue";
   import {ElLoadingComponent} from "element-ui/types/loading";
   import PrkImageCard from "@/components/card/PrkImageCard.vue";
+  import PrkCardFlip from "@/components/card/PrkCardFlip.vue";
   import PrkAvatar from "@/components/avatar/PrkAvatar.vue";
   import moment from "moment"
   import Vue from 'vue';
@@ -90,6 +99,7 @@
     components: {
       PrkInfinityScroll,
       PrkImageCard,
+      PrkCardFlip,
       BoardSearch,
       PrkAvatar
     },
@@ -139,7 +149,10 @@
           this.d_loading = undefined
         }
 
-        this.d_items = content;
+        // this.d_items = content;
+        for (let e of content) {
+          this.d_items.push(e);
+        }
         return content;
       },
 
@@ -184,6 +197,30 @@
         this.d_loading = this.loadingService({
           fullscreen: true
         })
+      },
+
+
+      details: function (item: Content) {
+
+      },
+
+      report: function (item: Content) {
+        this.$message({
+          type: 'info',
+          message: `${this.strings.reported} ${item.media.name}`
+        });
+      },
+
+      open: function (item: Content) {
+        const win = window.open(item.media.url, '_blank');
+        if (win == null) {
+          this.$message({
+            type: 'error',
+            message: `${this.strings.openError}: ${item.media.url}`
+          });
+          return;
+        }
+        win.focus();
       },
 
       _dateFormat: function (date: number | string): string {

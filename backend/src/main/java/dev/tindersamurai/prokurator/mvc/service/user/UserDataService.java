@@ -10,6 +10,10 @@ public interface UserDataService {
 		TokenExpiredException(String token) {
 			super("Token expired: " + token);
 		}
+
+		TokenExpiredException(String token, Throwable e) {
+			super("Token expired: " + token, e);
+		}
 	}
 
 	@Value class Token {

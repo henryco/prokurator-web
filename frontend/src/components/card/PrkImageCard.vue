@@ -10,7 +10,7 @@
       </div>
 
       <el-image :src="image" class="image" @load="_loaded">
-        <span slot="placeholder">Loading...</span>
+        <span slot="placeholder"><i class="el-icon-loading"></i></span>
       </el-image>
     </div>
 
@@ -56,6 +56,7 @@
     position: relative;
     width: 100%;
     height: 100%;
+    z-index: 0;
   }
 
   .flip {
