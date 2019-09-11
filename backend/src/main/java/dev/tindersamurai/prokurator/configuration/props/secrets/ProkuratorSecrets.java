@@ -8,4 +8,6 @@ public interface ProkuratorSecrets {
 	String getOAuthScope();
 
 	String getOAuthRedirect();
+
+	String getBotToken();
 }

@@ -15,14 +15,7 @@
     if (r) {
       for (let k in r) {
         if (r.hasOwnProperty(k)) {
-          const id = k;
-          const v = r[k];
-          const e = id === v ? '' : `(${id})`;
-          results.push({
-            label: `${v} ${e}`,
-            value: k,
-            name: k
-          });
+          results.push({label: r[k], value: k, name: r[k]});
         }
       }
     }
@@ -81,20 +74,15 @@
 
       _fetch: async function (context: string, query: string): Promise<Context[]> {
         return (<Record<string, Function>>{
-          "category": this._category,
+          "category": this._raw,
           "channel": this._channel,
           "deleted": this._bool,
           "author": this._user,
           "before": this._date,
           "after": this._date,
           "nsfw": this._bool,
-          "file": this._file
+          "file": this._raw
         })[`${context}`](query)
-      },
-
-      _category: async function (query: string): Promise<Context[]> {
-        const r: Record<string, string> = await this.fetch('category', query);
-        return _map(r);
       },
 
       _channel: async function (query: string): Promise<Context[]> {
@@ -107,9 +95,8 @@
         return _map(r);
       },
 
-      _file: async function (query: string): Promise<Context[]> {
-        const r: Record<string, string> = await this.fetch('file', query);
-        return _map(r);
+      _raw: async function (query: string): Promise<Context[]> {
+        return <Context[]> [{name: query, value: query}]
       },
 
       _bool: async function (query: string) {

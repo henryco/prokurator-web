@@ -1,37 +1,34 @@
-import PrkMediaApi, {Probe, Page, Content, Details, Channel} from "./";
+import PrkMediaApi, {Probe, Content} from "./";
 
 export default class MockMediaApi implements PrkMediaApi {
 
   async fetchMediaContent(probe: Probe, guild: string): Promise<Content[]> {
-    await new Promise(r => setTimeout(r, 1500));
-    return [
-      {
-        id: "123",
-        date: 0,
-        deleted: false,
-        author: {
-          id: "12345",
-          name: "Someone",
-          icon: ""
-        },
-        media: {
-          id: "wesdfbdf",
-          name: "Wut.png",
-          size: 1423546,
-          image: true,
-          url: ""
-        },
-        channel: {
-          id: "2345346546",
-          name: "random",
-          nsfw: false,
-          guild: {
-            id: "sdfbertb34345",
-            name: "Some guild",
-            icon: "dfgdfb.png"
-          }
-        }
-      },
+    // default behavior on deleted items
+    if (probe.query.deleted === undefined || probe.query.deleted.length === 0) {
+      probe.query.deleted = [false]
+    }
+
+    // default behavior on nsfw items
+    if (probe.query.nsfw === undefined || probe.query.nsfw.length === 0) {
+      probe.query.nsfw = [false]
+    }
+
+    console.dir(probe)
+
+    await new Promise(r => setTimeout(r, 500));
+    return [{ "id": "620313435888025604", "date": 1567900800000, "media": { "id": "fde6ac8e-29c5-43ec-8935-2fea80b679f4", "url": "https://images.unsplash.com/photo-1492490153271-65c695038652?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", "name": "unknown.png", "size": 3574317, "image": true }, "author": { "id": "230748644117184513", "name": "dangerous boy", "icon": "https://cdn.discordapp.com/avatars/230748644117184513/402476fe9dda0517d7d5542479d9b281.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false },
+      { "id": "620305639091994625", "date": 1567900800000, "media": { "id": "7885d1cf-e9c7-44d3-9aaf-18bb69c1a390", "url": "https://images.unsplash.com/photo-1495524455245-b0f961d738a9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80", "name": "unknown.png", "size": 950168, "image": true }, "author": { "id": "292789928247689216", "name": "Killeras", "icon": "https://cdn.discordapp.com/avatars/292789928247689216/0e88751d9be61cbe7f75dc6491b7d43d.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false },
+      { "id": "620305033124380722", "date": 1567900800000, "media": { "id": "557df90b-517a-4284-8af2-d7df0eefbaab", "url": "https://images.unsplash.com/photo-1441920007991-ae5ddfade6d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80", "name": "unknown.png", "size": 966005, "image": true }, "author": { "id": "292789928247689216", "name": "Killeras", "icon": "https://cdn.discordapp.com/avatars/292789928247689216/0e88751d9be61cbe7f75dc6491b7d43d.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false },
+      { "id": "620305033124380722", "date": 1567900800000, "media": { "id": "557df90b-517a-4284-8af2-d7df0eefbaab", "url": "https://images.unsplash.com/photo-1485249884563-0de923c9a8db?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", "name": "unknown.png", "size": 966005, "image": true }, "author": { "id": "292789928247689216", "name": "Killeras", "icon": "https://cdn.discordapp.com/avatars/292789928247689216/0e88751d9be61cbe7f75dc6491b7d43d.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false },
+      { "id": "620305033124380722", "date": 1567900800000, "media": { "id": "557df90b-517a-4284-8af2-d7df0eefbaab", "url": "https://images.unsplash.com/photo-1426001094903-70f302dc2d24?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80", "name": "unknown.png", "size": 966005, "image": true }, "author": { "id": "292789928247689216", "name": "Killeras", "icon": "https://cdn.discordapp.com/avatars/292789928247689216/0e88751d9be61cbe7f75dc6491b7d43d.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false },
+      { "id": "620305033124380722", "date": 1567900800000, "media": { "id": "557df90b-517a-4284-8af2-d7df0eefbaab", "url": "https://images.unsplash.com/photo-1471440671318-55bdbb772f93?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80", "name": "unknown.png", "size": 966005, "image": true }, "author": { "id": "292789928247689216", "name": "Killeras", "icon": "https://cdn.discordapp.com/avatars/292789928247689216/0e88751d9be61cbe7f75dc6491b7d43d.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false },
+      { "id": "620305033124380722", "date": 1567900800000, "media": { "id": "557df90b-517a-4284-8af2-d7df0eefbaab", "url": "https://images.unsplash.com/photo-1439801774385-02b0469e6abe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80", "name": "unknown.png", "size": 966005, "image": true }, "author": { "id": "292789928247689216", "name": "Killeras", "icon": "https://cdn.discordapp.com/avatars/292789928247689216/0e88751d9be61cbe7f75dc6491b7d43d.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false },
+      { "id": "620305033124380722", "date": 1567900800000, "media": { "id": "557df90b-517a-4284-8af2-d7df0eefbaab", "url": "https://images.unsplash.com/photo-1484651890318-ca4110437e20?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", "name": "unknown.png", "size": 966005, "image": true }, "author": { "id": "292789928247689216", "name": "Killeras", "icon": "https://cdn.discordapp.com/avatars/292789928247689216/0e88751d9be61cbe7f75dc6491b7d43d.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false },
+      { "id": "620305033124380722", "date": 1567900800000, "media": { "id": "557df90b-517a-4284-8af2-d7df0eefbaab", "url": "https://images.unsplash.com/photo-1459247512518-2d9ea60e7489?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", "name": "unknown.png", "size": 966005, "image": true }, "author": { "id": "292789928247689216", "name": "Killeras", "icon": "https://cdn.discordapp.com/avatars/292789928247689216/0e88751d9be61cbe7f75dc6491b7d43d.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false },
+      { "id": "620303286548955166", "date": 1567900800000, "media": { "id": "734fe34b-481c-4ac5-9e3e-b4c973e0b6d1", "url": "https://images.unsplash.com/photo-1495507015875-089a5c9bd885?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80", "name": "unknown.png", "size": 1118317, "image": true }, "author": { "id": "292789928247689216", "name": "Killeras", "icon": "https://cdn.discordapp.com/avatars/292789928247689216/0e88751d9be61cbe7f75dc6491b7d43d.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false },
+      { "id": "620303286548955166", "date": 1567900800000, "media": { "id": "734fe34b-481c-4ac5-9e3e-b4c973e0b6d1", "url": "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", "name": "unknown.png", "size": 1118317, "image": true }, "author": { "id": "292789928247689216", "name": "Killeras", "icon": "https://cdn.discordapp.com/avatars/292789928247689216/0e88751d9be61cbe7f75dc6491b7d43d.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false },
+      { "id": "620303286548955166", "date": 1567900800000, "media": { "id": "734fe34b-481c-4ac5-9e3e-b4c973e0b6d1", "url": "https://images.unsplash.com/photo-1494434169045-c3a62c5db9c8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1054&q=80", "name": "unknown.png", "size": 1118317, "image": true }, "author": { "id": "292789928247689216", "name": "Killeras", "icon": "https://cdn.discordapp.com/avatars/292789928247689216/0e88751d9be61cbe7f75dc6491b7d43d.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false },
+      { "id": "620303286548955166", "date": 1567900800000, "media": { "id": "734fe34b-481c-4ac5-9e3e-b4c973e0b6d1", "url": "https://images.unsplash.com/photo-1501541217800-516fcdce52ec?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80", "name": "unknown.png", "size": 1118317, "image": true }, "author": { "id": "292789928247689216", "name": "Killeras", "icon": "https://cdn.discordapp.com/avatars/292789928247689216/0e88751d9be61cbe7f75dc6491b7d43d.png" }, "channel": { "id": "454679745842642944", "name": "pogaduszki", "nsfw": false, "guild": "448453867814780930", "category": "Weeb stuff" }, "deleted": false }
     ];
   }
 

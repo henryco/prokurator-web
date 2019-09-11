@@ -25,9 +25,36 @@
         :fetch="filter"
         class="top"
       />
-      <prk-infinity-scroll :next="false" @fetch="scrollEvent">
-        <div v-for="item of d_items" :key="item.id">
-          {{item}}
+
+      <prk-infinity-scroll :next="false" delay="500" @fetch="scrollEvent">
+        <div class="image-container">
+          <div v-for="i in 4" class="image-column">
+            <div class="image-padding">
+              <prk-image-card
+                v-for="k of c_items.length"
+                v-if="_inColumn(i - 1, k - 1, 4)"
+                :key="c_items[k - 1].id"
+                :image="c_items[k - 1].media.url"
+                class="g-image"
+              >
+                <prk-avatar
+                  :icon="c_items[k - 1].author.icon"
+                  :name="c_items[k - 1].author.name"
+                >
+                  <span slot="right" class="g-date">
+                    {{_dateFormat(c_items[k - 1].date)}}
+                  </span>
+                </prk-avatar>
+
+                <prk-card-flip
+                  slot="flip"
+                  @details="details(c_items[k - 1])"
+                  @report="report(c_items[k - 1])"
+                  @open="open(c_items[k - 1])"
+                />
+              </prk-image-card>
+            </div>
+          </div>
         </div>
       </prk-infinity-scroll>
     </div>
@@ -43,6 +70,10 @@
   import PrkInfinityScroll, {LoadEvent} from "@/components/scroll"
   import BoardSearch from "@/composites/search/BoardSearch.vue";
   import {ElLoadingComponent} from "element-ui/types/loading";
+  import PrkImageCard from "@/components/card/PrkImageCard.vue";
+  import PrkCardFlip from "@/components/card/PrkCardFlip.vue";
+  import PrkAvatar from "@/components/avatar/PrkAvatar.vue";
+  import moment from "moment"
   import Vue from 'vue';
 
   const SIZE: number = 20;
@@ -58,7 +89,7 @@
     d_loading?: ElLoadingComponent,
     d_items: Content[];
     d_guild?: Guild;
-    d_query?: Query;
+    d_query: Query;
     d_page: number;
   }
 
@@ -67,13 +98,16 @@
 
     components: {
       PrkInfinityScroll,
-      BoardSearch
+      PrkImageCard,
+      PrkCardFlip,
+      BoardSearch,
+      PrkAvatar
     },
 
     data: () => (<State> {
       d_loading: undefined,
       d_guild: undefined,
-      d_query: undefined,
+      d_query: {},
       d_page: 0,
       d_items: []
     }),
@@ -93,6 +127,9 @@
       },
       c_id: function () {
         return this.$route.params.id;
+      },
+      c_items: function (): Content[] {
+        return this.d_items ? this.d_items : []
       }
     },
 
@@ -112,28 +149,40 @@
           this.d_loading = undefined
         }
 
-        this.d_items = content;
+        // this.d_items = content;
+        for (let e of content) {
+          this.d_items.push(e);
+        }
         return content;
       },
 
-      filter: async function (c: string, s: string): Promise<Record<string, string>> {
-        if (c === 'category') {
-          return {'abc': '123', 'cde': 'wow', 'same': 'same'}
-        }
+      filter: async function (c: string, q: string): Promise<Record<string, string>> {
+        const guildId = this.$route.params.id;
         if (c === 'channel') {
-          return {}
+          const channels = await this.api().guild.fetchGuildChannels(guildId, q);
+          let obj: Record<string, string> = {}
+          for (let m of channels) {
+            obj[`${m.id}`] = m.name
+          }
+          return obj
         }
         if (c === 'user') {
-          return {}
+          const members = await this.api().guild.fetchGuildMembers(guildId, q);
+          let obj: Record<string, string> = {}
+          for (let m of members) {
+            obj[`${m.id}`] = m.name
+          }
+          return obj
         }
-        if (c === 'file') {
-          return {}
-        }
+
         return {}
       },
 
       search: async function (query?: Query) {
-        this.d_query = query;
+        console.log('search: ')
+        console.dir(query)
+        this.d_query = (query === undefined) ? {} : query;
+        this.d_page = 0
         this.startLoader();
         await this.load();
       },
@@ -148,6 +197,38 @@
         this.d_loading = this.loadingService({
           fullscreen: true
         })
+      },
+
+
+      details: function (item: Content) {
+
+      },
+
+      report: function (item: Content) {
+        this.$message({
+          type: 'info',
+          message: `${this.strings.reported} ${item.media.name}`
+        });
+      },
+
+      open: function (item: Content) {
+        const win = window.open(item.media.url, '_blank');
+        if (win == null) {
+          this.$message({
+            type: 'error',
+            message: `${this.strings.openError}: ${item.media.url}`
+          });
+          return;
+        }
+        win.focus();
+      },
+
+      _dateFormat: function (date: number | string): string {
+        return moment(new Date(Number(date))).format('MM/DD/YYYY');
+      },
+
+      _inColumn: function (i: number, k: number, cols: number): boolean {
+        return ((k - i) % cols == 0)
       }
     },
 
@@ -228,6 +309,40 @@
       .top {
         margin-top: 12px;
         margin-bottom: 25px;
+      }
+    }
+
+    .image-container {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: stretch;
+
+      -webkit-user-select: none; /* Safari */
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* IE10+/Edge */
+      user-select: none; /* Standard */
+
+      .image-column {
+        max-width: 25%;
+        width: 25%;
+      }
+
+      .image-padding {
+        padding: 10px;
+      }
+
+      .g-image {
+        width: 100%;
+        height: auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+
+      .g-date {
+        font-size: 13px;
       }
     }
 

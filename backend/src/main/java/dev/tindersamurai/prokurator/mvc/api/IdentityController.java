@@ -1,7 +1,6 @@
 package dev.tindersamurai.prokurator.mvc.api;
 
-import dev.tindersamurai.prokurator.configuration.security.auth.credentials.DiscordTokenPrincipal;
-import dev.tindersamurai.prokurator.configuration.security.auth.session.service.access.TokenAccessService;
+import dev.tindersamurai.prokurator.mvc.service.auth.AuthenticationTokenExtractor;
 import dev.tindersamurai.prokurator.mvc.service.guild.GuildDataService;
 import dev.tindersamurai.prokurator.mvc.service.user.UserDataService;
 import dev.tindersamurai.prokurator.mvc.service.user.UserDataService.Guild;
@@ -20,19 +19,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/protected/identity")
 public class IdentityController {
 
-    private final TokenAccessService tokenAccessService;
+    private final AuthenticationTokenExtractor extractor;
     private final GuildDataService guildDataService;
     private final UserDataService userDataService;
 
     @Autowired
     public IdentityController(
-            TokenAccessService tokenAccessService,
+            AuthenticationTokenExtractor extractor,
             GuildDataService guildDataService,
             UserDataService userDataService
     ) {
-        this.tokenAccessService = tokenAccessService;
         this.guildDataService = guildDataService;
         this.userDataService = userDataService;
+        this.extractor = extractor;
     }
 
     @Value private static class UserForm {
@@ -50,21 +49,19 @@ public class IdentityController {
 
     @GetMapping("/user")
     public UserForm getSelfInformation(Authentication authentication) throws TokenExpiredException {
-        val principal = ((DiscordTokenPrincipal) authentication.getPrincipal());
-        val token = tokenAccessService.getToken(principal.getTokenId());
+        val token = extractor.extractToken(authentication);
         val user = userDataService.retrieveUserData(token.getAccess());
         return new UserForm(user.getUsername(), user.getAvatar(), user.getId());
     }
 
     @GetMapping("/guilds")
     public UserGuild[] getSelfGuildInformation(Authentication authentication) throws TokenExpiredException {
-        val principal = ((DiscordTokenPrincipal) authentication.getPrincipal());
-        val token = tokenAccessService.getToken(principal.getTokenId());
+        val token = extractor.extractToken(authentication);
         val guilds = userDataService.retrieveUserGuilds(token.getAccess());
 
         log.debug("user guilds: {}", guilds);
         val ids = guilds.stream().map(Guild::getId).toArray(String[]::new);
-        val handled = guildDataService.filterHandledGuilds(ids, principal.getTokenId());
+        val handled = guildDataService.filterHandledGuilds(ids, token.getTokenId());
 
         return guilds.stream().filter(e -> isOwner(e.getPermissions())).map(
                 e -> new UserGuild(e.getName(), e.getIcon(), e.getId(), contains(handled, e.getId()))
@@ -73,6 +70,7 @@ public class IdentityController {
 
     private static boolean isOwner(String permissions) {
         val p = Long.decode(permissions);
+        log.debug("permissions: {}" ,permissions);
         return (p & 0x8) == 0x8 || (p & 0x20) == 0x20;
     }
 

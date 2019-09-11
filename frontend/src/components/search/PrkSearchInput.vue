@@ -154,7 +154,8 @@
         this.d_context = undefined;
         this.d_filters.push(<Filter> {
           value: item.value,
-          type: context
+          type: context,
+          name: item.name
         });
       },
 
