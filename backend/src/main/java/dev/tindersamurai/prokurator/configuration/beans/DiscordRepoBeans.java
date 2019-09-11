@@ -2,7 +2,6 @@ package dev.tindersamurai.prokurator.configuration.beans;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.tindersamurai.prokurator.discord.DiscordClientFactory;
-import dev.tindersamurai.prokurator.discord.DiscordGuildRepository;
 import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository;
 import dev.tindersamurai.prokurator.discord.DiscordUserInfoRepository;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +20,4 @@ public class DiscordRepoBeans {
 		return DiscordClientFactory.createClient(DiscordUserInfoRepository.class, mapper);
 	}
 
-	@Bean
-	public DiscordGuildRepository guildRepository(ObjectMapper mapper) {
-		return DiscordClientFactory.createClient(DiscordGuildRepository.class, mapper);
-	}
 }
