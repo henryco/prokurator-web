@@ -41,34 +41,4 @@ public interface DiscordUserInfoRepository {
 	@GET("@me/guilds")
 	Call<List<GuildsResponse>> _guilds(@Header("Authorization") String authorization);
 
-
-	default UserResponse getUserInfo(String token) {
-		return getUserInfo(token, "@me");
-	}
-
-	default UserResponse getUserInfo(String token, String uid) {
-		try {
-			val response = _user("Bearer " + token, uid).execute();
-			if (!response.isSuccessful())
-				throw new RuntimeException("Cannot exchange user info: "
-						+ (response.errorBody() == null ? "" : response.errorBody().string())
-				);
-			return response.body();
-		} catch (Exception e) {
-			throw new RuntimeException("Cannot exchange user info", e);
-		}
-	}
-
-	default List<GuildsResponse> getUserGuilds(String token) {
-		try {
-			val response = _guilds("Bearer " + token).execute();
-			if (!response.isSuccessful())
-				throw new RuntimeException("Cannot exchange user guilds: "
-						+ (response.errorBody() == null ? "" : response.errorBody().string())
-				);
-			return response.body();
-		} catch (Exception e) {
-			throw new RuntimeException("Cannot exchange user guilds", e);
-		}
-	}
 }

@@ -4,6 +4,8 @@ declare interface I8NStrings {
   servers: string;
   logout: string;
   prokurator: string;
+  reported: string;
+  openError: string;
 }
 
 declare interface I8NMixin {
@@ -20,7 +22,9 @@ const I8NEng: I8NStrings = {
   account: "My Account",
   logout: "Logout",
   servers: "Servers",
-  prokurator: "Lighthouse"
+  prokurator: "Lighthouse",
+  reported: "Reported",
+  openError: "Cannot open image"
 }
 
 import Vue from "vue";

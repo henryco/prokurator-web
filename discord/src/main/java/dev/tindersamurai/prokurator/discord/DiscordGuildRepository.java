@@ -2,7 +2,6 @@ package dev.tindersamurai.prokurator.discord;
 
 import dev.tindersamurai.prokurator.discord.util.BaseURL;
 import lombok.Value;
-import lombok.val;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -72,57 +71,5 @@ public interface DiscordGuildRepository {
             @Header("Authorization") String botToken,
             @Path("gid") String gid
     );
-
-    default List<GuildChannel> getGuildChannels(String botToken, String guildId) {
-        try {
-            val response = _guildChannels("Bot " + botToken, guildId).execute();
-            if (!response.isSuccessful())
-                throw new RuntimeException("Cannot fetch guild channels: "
-                        + (response.errorBody() == null ? "" : response.errorBody().string())
-                );
-            return response.body();
-        } catch (Exception e) {
-            throw new RuntimeException("Cannot fetch guild channels", e);
-        }
-    }
-
-    default List<GuildMember> getGuildMembers(String botToken, String guildId) {
-        try {
-            val response = _guildMembers("Bot " + botToken, guildId, 1000).execute();
-            if (!response.isSuccessful())
-                throw new RuntimeException("Cannot fetch guild members: "
-                        + (response.errorBody() == null ? "" : response.errorBody().string())
-                );
-            val list = response.body();
-            if (list == null)
-                throw new NullPointerException("Users list == null");
-
-            if (list.size() < 1000)
-                return list;
-
-            boolean full = false;
-            while (!full) {
-                val last = list.get(list.size() - 1).getUser().getId();
-                val r = _guildMembers("Bot " + botToken, guildId,1000, last).execute();
-                if (!r.isSuccessful())
-                    throw new RuntimeException("Cannot fetch guild members: "
-                            + (r.errorBody() == null ? "" : r.errorBody().string())
-                    );
-
-                val l = r.body();
-                if (l == null)
-                    throw new NullPointerException("Users list == null");
-
-                list.addAll(l);
-
-                if (l.size() < 1000)
-                    full = true;
-            }
-
-            return list;
-        } catch (Exception e) {
-            throw new RuntimeException("Cannot fetch guild members", e);
-        }
-    }
 
 }

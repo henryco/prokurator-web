@@ -2,8 +2,8 @@ package dev.tindersamurai.prokurator.configuration.security.auth.session.service
 
 import dev.tindersamurai.prokurator.configuration.props.secrets.ProkuratorSecrets;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.data.DiscordTokenRepository;
-import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository;
 import dev.tindersamurai.prokurator.discord.DiscordTokenExchangeRepository.TokenRefreshForm;
+import dev.tindersamurai.prokurator.discord.client.DiscordTokenClient;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +16,19 @@ import java.util.Date;
 @Service @Slf4j
 public class DiscordTokenService implements TokenAccessService {
 
-	private final DiscordTokenExchangeRepository exchangeRepository;
 	private final DiscordTokenRepository tokenRepository;
+	private final DiscordTokenClient discordTokenClient;
 	private final ProkuratorSecrets secrets;
 
 	@Autowired
 	public DiscordTokenService(
-			DiscordTokenExchangeRepository exchangeRepository,
 			DiscordTokenRepository tokenRepository,
+			DiscordTokenClient discordTokenClient,
 			ProkuratorSecrets secrets
 	) {
-		this.exchangeRepository = exchangeRepository;
+
 		this.tokenRepository = tokenRepository;
+		this.discordTokenClient = discordTokenClient;
 		this.secrets = secrets;
 	}
 
@@ -44,7 +45,7 @@ public class DiscordTokenService implements TokenAccessService {
 
 			log.debug("TOKEN EXPIRED: {}", refreshForm);
 
-			val response = exchangeRepository.refresh(refreshForm);
+			val response = discordTokenClient.refresh(refreshForm);
 			one.setExpires(expTime(response.getExpiresIn()));
 			one.setRefreshToken(response.getRefreshToken());
 			one.setAccessToken(response.getAccessToken());
