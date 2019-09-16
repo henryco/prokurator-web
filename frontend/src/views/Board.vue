@@ -134,7 +134,7 @@
     },
 
     methods: {
-      load: async function (): Promise<Content[]> {
+      load: async function (reset: boolean): Promise<Content[]> {
         // noinspection UnnecessaryLocalVariableJS
         const content = await this.api().media.fetchMediaContent({
           query: this.d_query,
@@ -149,7 +149,7 @@
           this.d_loading = undefined
         }
 
-        // this.d_items = content;
+        if (reset) this.d_items = [];
         for (let e of content) {
           this.d_items.push(e);
         }
@@ -184,11 +184,11 @@
         this.d_query = (query === undefined) ? {} : query;
         this.d_page = 0
         this.startLoader();
-        await this.load();
+        await this.load(true);
       },
 
       scrollEvent: async function (event: LoadEvent) {
-        const content = await this.load();
+        const content = await this.load(false);
         if (content.length === SIZE)
           event.next();
       },
