@@ -1,7 +1,6 @@
 package dev.tindersamurai.prokurator.configuration.security.filter;
 
 import dev.tindersamurai.prokurator.configuration.security.auth.credentials.DiscordTokenPrincipal;
-import dev.tindersamurai.prokurator.configuration.security.auth.details.user.DefaultDiscordUserDetails;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.exception.TokenWhitelistException;
 import dev.tindersamurai.prokurator.configuration.security.auth.session.service.whitelist.TokenWhitelistService;
 import dev.tindersamurai.prokurator.configuration.security.filter.props.JwtSecretProperties;
@@ -32,8 +31,7 @@ import java.util.stream.Collectors;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 	private final JwtSecretProperties jwtSecretProperties;
-	private @Setter
-	TokenWhitelistService whitelistService;
+	private @Setter TokenWhitelistService whitelistService;
 
 	public JwtAuthorizationFilter(
 			AuthenticationManager authenticationManager,

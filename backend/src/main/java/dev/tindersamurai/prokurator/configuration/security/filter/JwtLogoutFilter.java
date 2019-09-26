@@ -23,8 +23,7 @@ import java.io.IOException;
 public class JwtLogoutFilter extends OncePerRequestFilter {
 
 	private final JwtSecretProperties jwtSecretProperties;
-	private @Setter
-	TokenWhitelistService whitelistService;
+	private @Setter TokenWhitelistService whitelistService;
 	private RequestMatcher requestMatcher;
 
 	public JwtLogoutFilter(

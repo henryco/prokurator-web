@@ -27,8 +27,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	private final AuthenticationProcessor authenticationProcessor;
 	private final JwtSecretProperties jwtSecretProperties;
-	private @Setter
-	TokenWhitelistService whitelistService;
+	private @Setter TokenWhitelistService whitelistService;
 
 	public JwtAuthenticationFilter(
 			AuthenticationProcessor authenticationProcessor,
