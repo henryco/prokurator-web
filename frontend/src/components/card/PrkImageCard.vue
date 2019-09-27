@@ -1,5 +1,5 @@
 <template>
-  <el-card :body-style="{ padding: '0px' }">
+  <el-card :body-style="{ padding: '0px' }" v-if="!d_error">
 
     <div class="hover-area">
 
@@ -9,9 +9,8 @@
         </div>
       </div>
 
-      <el-image :src="image" class="image" @load="_loaded">
-        <span slot="placeholder"><i class="el-icon-loading"></i></span>
-      </el-image>
+      <progressive-img :src="image" class="image" @onLoad="_loaded" @onError="_error"/>
+
     </div>
 
 
@@ -26,21 +25,31 @@
 
   declare interface CState {
     d_loaded: boolean;
+    d_error: boolean;
   }
 
   export default Vue.extend({
     name: "PrkImageCard",
     props: {
-      image: [String]
+      image: [String],
+      id: [String, Number]
     },
 
     data: () => (<CState> {
-      d_loaded: false
+      d_loaded: false,
+      d_error: false
     }),
 
     methods: {
       _loaded: function () {
-        this.d_loaded = true
+        this.d_loaded = true;
+        this.$emit('loaded', this.id)
+        this.$emit('finish', this.id)
+      },
+      _error: function () {
+        this.d_error = true;
+        this.$emit('error', this.id);
+        this.$emit('finish', this.id)
       }
     }
   });

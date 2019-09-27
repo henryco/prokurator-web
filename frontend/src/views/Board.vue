@@ -34,7 +34,9 @@
                 v-for="k of c_items.length"
                 v-if="_inColumn(i - 1, k - 1, 4)"
                 :key="c_items[k - 1].id"
+                :id="c_items[k - 1].id"
                 :image="c_items[k - 1].media.url"
+                @finish="_imageFinish"
                 class="g-image"
               >
                 <prk-avatar
@@ -77,6 +79,7 @@
   import Vue from 'vue';
 
   const SIZE: number = 20;
+  const PARALLEL: number = 5;
 
   declare interface Guild {
     id: string;
@@ -86,6 +89,7 @@
   }
 
   declare interface State {
+    d_processing: Set<string | number>;
     d_loading?: ElLoadingComponent,
     d_items: Content[];
     d_guild?: Guild;
@@ -105,6 +109,7 @@
     },
 
     data: () => (<State> {
+      d_processing: new Set<string|number>(),
       d_loading: undefined,
       d_guild: undefined,
       d_query: {},
@@ -134,7 +139,7 @@
     },
 
     methods: {
-      load: async function (): Promise<Content[]> {
+      load: async function (reset: boolean): Promise<Content[]> {
         // noinspection UnnecessaryLocalVariableJS
         const content = await this.api().media.fetchMediaContent({
           query: this.d_query,
@@ -149,8 +154,12 @@
           this.d_loading = undefined
         }
 
-        // this.d_items = content;
+        if (reset) {
+          this.d_processing.clear();
+          this.d_items = [];
+        }
         for (let e of content) {
+          this.d_processing.add(e.id);
           this.d_items.push(e);
         }
         return content;
@@ -184,11 +193,24 @@
         this.d_query = (query === undefined) ? {} : query;
         this.d_page = 0
         this.startLoader();
-        await this.load();
+        await this.load(true);
       },
 
       scrollEvent: async function (event: LoadEvent) {
-        const content = await this.load();
+        // TODO: add whole logic to queue
+
+        if (this.d_processing.size > PARALLEL) {
+          console.log('too much: ' + this.d_processing.size)
+          return;
+        }
+
+        const content = await this.load(false);
+
+        if (this.d_processing.size > PARALLEL) {
+          console.log('too much: ' + this.d_processing.size)
+          return;
+        }
+
         if (content.length === SIZE)
           event.next();
       },
@@ -221,6 +243,11 @@
           return;
         }
         win.focus();
+      },
+
+      _imageFinish: function (id?: number | string) {
+        if (id === undefined) return;
+        this.d_processing.delete(id);
       },
 
       _dateFormat: function (date: number | string): string {
