@@ -18,3 +18,5 @@ TODO:
 * Backend
 * Tests
 * -> k8s
+
+![screenshot](https://raw.githubusercontent.com/henryco/prokurator-web/master/web.png "Screenshot")
